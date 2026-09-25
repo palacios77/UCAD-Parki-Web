@@ -1,0 +1,483 @@
+<app-sistema-layout>
+
+  <div class="vigilante-pagina">
+
+    <main class="vigilante-contenido">
+
+
+      <!-- BUSCADOR DE VEHÍCULO -->
+      <div class="card tarjeta-busqueda">
+
+        <div class="card-header">
+
+          <h5>Registro de entrada y salida</h5>
+
+          <p>
+            Ingrese el número de placa para consultar el vehículo.
+          </p>
+
+        </div>
+
+
+        <div class="card-body">
+
+          <div class="form-group">
+
+            <label for="placa">
+              Número de placa
+            </label>
+
+
+            <div class="input-group">
+
+              <input
+                type="text"
+                id="placa"
+                class="form-control"
+                placeholder="Ejemplo: ABC-123"
+                [(ngModel)]="placa"
+                maxlength="10">
+
+
+              <div class="input-group-append">
+
+                <button
+                  type="button"
+                  class="btn ucad-boton-principal"
+                  (click)="buscarVehiculo()">
+
+                  Buscar
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- RESULTADO -->
+      <div
+        class="card tarjeta-resultado"
+        *ngIf="mostrarResultado">
+
+
+        <div class="card-header">
+
+          <h5>Información del vehículo</h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+          <!-- VEHÍCULO ENCONTRADO -->
+          <div *ngIf="vehiculoEncontrado">
+
+
+            <div class="vehiculo-informacion">
+
+
+              <div>
+
+                <span>Placa</span>
+
+                <strong>
+                  {{ vehiculoEncontrado.placa }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>Propietario</span>
+
+                <strong>
+                  {{ vehiculoEncontrado.propietario }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>Tipo de usuario</span>
+
+                <strong>
+                  {{ vehiculoEncontrado.tipoUsuario }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>Vehículo</span>
+
+                <strong>
+                  {{ vehiculoEncontrado.marca }}
+                  {{ vehiculoEncontrado.modelo }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>Color</span>
+
+                <strong>
+                  {{ vehiculoEncontrado.color }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>Estado</span>
+
+                <span
+                  class="badge"
+                  [ngClass]="
+                    vehiculoEncontrado.dentro
+                      ? 'ucad-estado-advertencia'
+                      : 'ucad-estado-exitoso'
+                  ">
+
+                  {{
+                    vehiculoEncontrado.dentro
+                      ? 'Dentro'
+                      : 'Fuera'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- VEHÍCULO FUERA -->
+            <div
+              class="resultado-accion"
+              *ngIf="!vehiculoEncontrado.dentro">
+
+
+              <p>
+                El vehículo se encuentra fuera
+                del estacionamiento.
+              </p>
+
+
+              <button
+                type="button"
+                class="btn ucad-boton-principal"
+                (click)="registrarEntrada()">
+
+                Registrar entrada
+
+              </button>
+
+            </div>
+
+
+
+            <!-- VEHÍCULO DENTRO -->
+            <div
+              class="resultado-accion"
+              *ngIf="vehiculoEncontrado.dentro">
+
+
+              <p>
+
+                Hora de entrada:
+
+                <strong>
+                  {{ vehiculoEncontrado.horaEntrada }}
+                </strong>
+
+              </p>
+
+
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="registrarSalida()">
+
+                Registrar salida
+
+              </button>
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- VEHÍCULO NO ENCONTRADO -->
+          <div
+            class="vehiculo-no-encontrado"
+            *ngIf="!vehiculoEncontrado">
+
+
+            <p>
+
+              No se encontró ningún vehículo registrado
+              con la placa:
+
+              <strong>
+                {{ placa }}
+              </strong>
+
+            </p>
+
+
+            <button
+              type="button"
+              class="btn ucad-boton-principal"
+              (click)="mostrarRegistroVehiculo()">
+
+              Registrar vehículo
+
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <div
+        class="card tarjeta-registro"
+        *ngIf="mostrarFormulario">
+
+
+        <div class="card-header">
+
+          <h5>Registrar nuevo vehículo</h5>
+
+          <p>
+            Complete la información del vehículo.
+          </p>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+          <form
+            #formularioVehiculo="ngForm"
+            (ngSubmit)="registrarVehiculo()">
+
+
+            <div class="form-row">
+
+
+              <!-- PLACA -->
+              <div class="form-group col-md-6">
+
+                <label for="nuevaPlaca">
+                  Número de placa
+                </label>
+
+
+                <input
+                  type="text"
+                  id="nuevaPlaca"
+                  name="placa"
+                  class="form-control"
+                  [(ngModel)]="nuevoVehiculo.placa"
+                  readonly>
+
+              </div>
+
+
+
+              <!-- TIPO DE USUARIO -->
+              <div class="form-group col-md-6">
+
+                <label for="tipoUsuario">
+                  Tipo de usuario
+                </label>
+
+
+                <select
+                  id="tipoUsuario"
+                  name="tipoUsuario"
+                  class="form-control"
+                  [(ngModel)]="nuevoVehiculo.tipoUsuario"
+                  required>
+
+
+                  <option value="">
+                    Seleccione una opción
+                  </option>
+
+
+                  <option value="Estudiante">
+                    Estudiante
+                  </option>
+
+
+                  <option value="Docente">
+                    Docente
+                  </option>
+
+
+                  <option value="Invitado">
+                    Invitado
+                  </option>
+
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- PROPIETARIO -->
+            <div class="form-group">
+
+              <label for="propietario">
+                Nombre del propietario
+              </label>
+
+
+              <input
+                type="text"
+                id="propietario"
+                name="propietario"
+                class="form-control"
+                placeholder="Ingrese el nombre completo"
+                [(ngModel)]="nuevoVehiculo.propietario"
+                required>
+
+            </div>
+
+
+
+            <div class="form-row">
+
+
+              <!-- MARCA -->
+              <div class="form-group col-md-4">
+
+                <label for="marca">
+                  Marca
+                </label>
+
+
+                <input
+                  type="text"
+                  id="marca"
+                  name="marca"
+                  class="form-control"
+                  placeholder="Ej. Toyota"
+                  [(ngModel)]="nuevoVehiculo.marca"
+                  required>
+
+              </div>
+
+
+
+              <!-- MODELO -->
+              <div class="form-group col-md-4">
+
+                <label for="modelo">
+                  Modelo
+                </label>
+
+
+                <input
+                  type="text"
+                  id="modelo"
+                  name="modelo"
+                  class="form-control"
+                  placeholder="Ej. Corolla"
+                  [(ngModel)]="nuevoVehiculo.modelo"
+                  required>
+
+              </div>
+
+
+
+              <!-- COLOR -->
+              <div class="form-group col-md-4">
+
+                <label for="color">
+                  Color
+                </label>
+
+
+                <input
+                  type="text"
+                  id="color"
+                  name="color"
+                  class="form-control"
+                  placeholder="Ej. Blanco"
+                  [(ngModel)]="nuevoVehiculo.color"
+                  required>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- BOTONES -->
+            <div class="registro-acciones">
+
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelarRegistroVehiculo()">
+
+                Cancelar
+
+              </button>
+
+
+              <button
+                type="submit"
+                class="btn ucad-boton-principal"
+                [disabled]="formularioVehiculo.invalid">
+
+                Registrar vehículo
+
+              </button>
+
+
+            </div>
+
+
+          </form>
+
+        </div>
+
+      </div>
+
+
+    </main>
+
+  </div>
+
+</app-sistema-layout>

@@ -26,7 +26,7 @@ export class Login {
 
     this.mensaje = '';
 
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard/vigilante']);
 
   }
 

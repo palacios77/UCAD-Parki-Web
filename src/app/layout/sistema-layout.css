@@ -1,0 +1,115 @@
+.sistema {
+
+  min-height: 100vh;
+
+  background-color: var(--ucad-fondo);
+
+}
+
+
+.sistema-encabezado {
+
+  min-height: 75px;
+
+  padding: 12px 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+}
+
+
+.sistema-marca {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+}
+
+
+.sistema-marca img {
+
+  width: 52px;
+
+  height: 52px;
+
+  object-fit: contain;
+
+  background-color: var(--ucad-blanco);
+
+  border-radius: 6px;
+
+  padding: 4px;
+
+}
+
+
+.sistema-marca h1 {
+
+  margin: 0;
+
+  font-size: 23px;
+
+  font-weight: 600;
+
+}
+
+
+.sistema-marca p {
+
+  margin: 3px 0 0;
+
+  font-size: 12px;
+
+  opacity: 0.85;
+
+}
+
+
+.sistema-usuario {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+}
+
+
+.sistema-contenido {
+
+  width: 100%;
+
+}
+
+
+@media (max-width: 768px) {
+
+  .sistema-encabezado {
+
+    padding: 15px 20px;
+
+  }
+
+
+  .sistema-marca p {
+
+    display: none;
+
+  }
+
+
+  .sistema-usuario span {
+
+    display: none;
+
+  }
+
+}

@@ -1,1 +1,230 @@
 /* You can add global styles to this file, and also import other style files */
+/* =====================================================
+   UCAD PARKI - ESTILOS GLOBALES
+   ===================================================== */
+
+:root {
+
+  /* Colores institucionales */
+  --ucad-azul: #073B6B;
+  --ucad-azul-secundario: #2878B8;
+  --ucad-dorado: #F5B800;
+
+  /* Colores generales */
+  --ucad-fondo: #F4F6F9;
+  --ucad-blanco: #FFFFFF;
+  --ucad-texto: #333333;
+  --ucad-texto-secundario: #666666;
+  --ucad-borde: #D5DCE3;
+
+}
+
+
+/* =====================================================
+   CONFIGURACIÓN GENERAL
+   ===================================================== */
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+
+  margin: 0;
+
+  background-color: var(--ucad-fondo);
+
+  color: var(--ucad-texto);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+
+/* =====================================================
+   ENCABEZADO INSTITUCIONAL
+   ===================================================== */
+
+.ucad-encabezado {
+
+  background-color: var(--ucad-azul);
+
+  color: var(--ucad-blanco);
+
+  border-bottom: 4px solid var(--ucad-dorado);
+
+}
+
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+
+.ucad-boton-principal {
+
+  background-color: var(--ucad-azul-secundario);
+
+  border-color: var(--ucad-azul-secundario);
+
+  color: var(--ucad-blanco);
+
+}
+
+
+.ucad-boton-principal:hover,
+.ucad-boton-principal:focus {
+
+  background-color: var(--ucad-azul);
+
+  border-color: var(--ucad-azul);
+
+  color: var(--ucad-blanco);
+
+}
+
+
+/* =====================================================
+   TARJETAS
+   ===================================================== */
+
+.ucad-tarjeta {
+
+  background-color: var(--ucad-blanco);
+
+  border: none;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* =====================================================
+   TÍTULOS
+   ===================================================== */
+
+.ucad-titulo {
+
+  color: var(--ucad-azul);
+
+  font-weight: 600;
+
+}
+
+
+.ucad-subtitulo {
+
+  color: var(--ucad-texto-secundario);
+
+}
+
+
+/* =====================================================
+   FORMULARIOS
+   ===================================================== */
+
+.ucad-label {
+
+  color: var(--ucad-azul);
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+}
+
+
+.ucad-input {
+
+  border: 1px solid var(--ucad-borde);
+
+  border-radius: 5px;
+
+}
+
+
+.ucad-input:focus {
+
+  border-color: var(--ucad-azul-secundario);
+
+  box-shadow:
+    0 0 0 2px rgba(40, 120, 184, 0.1);
+
+}
+
+
+/* =====================================================
+   ACENTO INSTITUCIONAL
+   ===================================================== */
+
+.ucad-acento {
+
+  border-top: 4px solid var(--ucad-dorado);
+
+}
+
+
+.ucad-texto-azul {
+
+  color: var(--ucad-azul);
+
+}
+
+
+.ucad-texto-dorado {
+
+  color: var(--ucad-dorado);
+
+}
+
+
+/* =====================================================
+   ESTADOS
+   ===================================================== */
+
+.ucad-estado-exitoso {
+
+  background-color: #28A745;
+
+  color: var(--ucad-blanco);
+
+}
+
+
+.ucad-estado-advertencia {
+
+  background-color: var(--ucad-dorado);
+
+  color: var(--ucad-blanco);
+
+}
+
+
+.ucad-estado-error {
+
+  background-color: #DC3545;
+
+  color: var(--ucad-blanco);
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .ucad-contenido {
+
+    padding: 20px;
+
+  }
+
+}
