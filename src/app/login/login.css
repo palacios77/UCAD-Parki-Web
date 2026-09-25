@@ -1,0 +1,97 @@
+.login-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f4f6f9;
+}
+
+.login-tarjeta {
+  width: 100%;
+  max-width: 400px;
+  padding: 35px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border-top: 4px solid #f5b800;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.login-tarjeta__marca {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-tarjeta__marca img {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 0 auto 15px;
+}
+
+.login-tarjeta__marca p {
+  margin: 0;
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 7px;
+  color: #073b6b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-control {
+  height: 42px;
+  border: 1px solid #d5dce3;
+  border-radius: 6px;
+}
+
+.form-control:focus {
+  border-color: #2878b8;
+  box-shadow: 0 0 0 2px rgba(40, 120, 184, 0.1);
+}
+
+.login-opciones {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.login-opciones a {
+  color: #2878b8;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.login-opciones a:hover {
+  text-decoration: underline;
+}
+
+.btn-primary {
+  background-color: #2878b8;
+  border-color: #2878b8;
+}
+
+.btn-primary:hover {
+  background-color: #073b6b;
+  border-color: #073b6b;
+}
+
+.login-tarjeta__pie {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+.login-tarjeta__pie p {
+  margin: 0;
+  color: #777777;
+  font-size: 12px;
+}

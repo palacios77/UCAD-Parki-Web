@@ -1,0 +1,60 @@
+<div class="login-pagina">
+
+  <div class="login-tarjeta">
+
+    <div class="login-tarjeta__marca">
+      <img src="/logo.jpeg">
+      <p>Sistema de Gestión y Control de Estacionamiento</p>
+    </div>
+
+    <form (submit)="iniciarSesion(); $event.preventDefault()">
+
+  <div class="form-group">
+    <label for="correo">Correo electrónico</label>
+
+    <input
+      type="email"
+      id="correo"
+      class="form-control"
+      [(ngModel)]="correo"
+      name="correo"
+      placeholder="Ingrese su correo">
+  </div>
+
+  <div class="form-group">
+    <label for="contrasena">Contraseña</label>
+
+    <input
+      type="password"
+      id="contrasena"
+      class="form-control"
+      [(ngModel)]="contrasena"
+      name="contrasena"
+      placeholder="Ingrese su contraseña">
+  </div>
+
+  <div class="login-opciones">
+    <a href="#">¿Olvidaste tu contraseña?</a>
+  </div>
+
+  <div
+    *ngIf="mensaje"
+    class="alert alert-danger">
+    {{ mensaje }}
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary btn-block">
+    Iniciar sesión
+  </button>
+
+</form>
+
+    <div class="login-tarjeta__pie">
+      <p>Universidad Cristiana de las Asambleas de Dios</p>
+    </div>
+
+  </div>
+
+</div>
