@@ -4,8 +4,10 @@
 
     <main class="vigilante-contenido">
 
+      <!-- =====================================================
+           BUSCADOR
+           ===================================================== -->
 
-      <!-- BUSCADOR DE VEHÍCULO -->
       <div class="card tarjeta-busqueda">
 
         <div class="card-header">
@@ -18,7 +20,6 @@
 
         </div>
 
-
         <div class="card-body">
 
           <div class="form-group">
@@ -26,7 +27,6 @@
             <label for="placa">
               Número de placa
             </label>
-
 
             <div class="input-group">
 
@@ -36,18 +36,18 @@
                 class="form-control"
                 placeholder="Ejemplo: ABC-123"
                 [(ngModel)]="placa"
-                maxlength="10">
-
+                maxlength="10"
+                (keyup.enter)="buscarVehiculo()"
+              >
 
               <div class="input-group-append">
 
                 <button
                   type="button"
                   class="btn ucad-boton-principal"
-                  (click)="buscarVehiculo()">
-
+                  (click)="buscarVehiculo()"
+                >
                   Buscar
-
                 </button>
 
               </div>
@@ -61,12 +61,30 @@
       </div>
 
 
+      <!-- =====================================================
+           MENSAJE
+           ===================================================== -->
 
-      <!-- RESULTADO -->
+      <div
+        *ngIf="mensaje"
+        class="alert"
+        [ngClass]="{
+          'alert-success': tipoMensaje === 'exito',
+          'alert-danger': tipoMensaje === 'error'
+        }"
+      >
+        {{ mensaje }}
+      </div>
+
+
+      <!-- =====================================================
+           RESULTADO DEL VEHÍCULO
+           ===================================================== -->
+
       <div
         class="card tarjeta-resultado"
-        *ngIf="mostrarResultado">
-
+        *ngIf="mostrarResultado"
+      >
 
         <div class="card-header">
 
@@ -78,12 +96,15 @@
         <div class="card-body">
 
 
-          <!-- VEHÍCULO ENCONTRADO -->
-          <div *ngIf="vehiculoEncontrado">
+          <!-- =================================================
+               VEHÍCULO ENCONTRADO
+               ================================================= -->
 
+          <div *ngIf="vehiculoEncontrado">
 
             <div class="vehiculo-informacion">
 
+              <!-- PLACA -->
 
               <div>
 
@@ -96,6 +117,8 @@
               </div>
 
 
+              <!-- PROPIETARIO -->
+
               <div>
 
                 <span>Propietario</span>
@@ -107,6 +130,8 @@
               </div>
 
 
+              <!-- TIPO DE USUARIO -->
+
               <div>
 
                 <span>Tipo de usuario</span>
@@ -117,6 +142,8 @@
 
               </div>
 
+
+              <!-- VEHÍCULO -->
 
               <div>
 
@@ -130,6 +157,8 @@
               </div>
 
 
+              <!-- COLOR -->
+
               <div>
 
                 <span>Color</span>
@@ -141,6 +170,8 @@
               </div>
 
 
+              <!-- ESTADO -->
+
               <div>
 
                 <span>Estado</span>
@@ -151,14 +182,13 @@
                     vehiculoEncontrado.dentro
                       ? 'ucad-estado-advertencia'
                       : 'ucad-estado-exitoso'
-                  ">
-
+                  "
+                >
                   {{
                     vehiculoEncontrado.dentro
                       ? 'Dentro'
                       : 'Fuera'
                   }}
-
                 </span>
 
               </div>
@@ -166,70 +196,69 @@
             </div>
 
 
+            <!-- =================================================
+                 VEHÍCULO FUERA → REGISTRAR ENTRADA
+                 ================================================= -->
 
-            <!-- VEHÍCULO FUERA -->
             <div
               class="resultado-accion"
-              *ngIf="!vehiculoEncontrado.dentro">
-
+              *ngIf="!vehiculoEncontrado.dentro"
+            >
 
               <p>
                 El vehículo se encuentra fuera
                 del estacionamiento.
               </p>
 
-
               <button
                 type="button"
                 class="btn ucad-boton-principal"
-                (click)="registrarEntrada()">
-
+                (click)="registrarEntrada()"
+              >
                 Registrar entrada
-
               </button>
 
             </div>
 
 
+            <!-- =================================================
+                 VEHÍCULO DENTRO → REGISTRAR SALIDA
+                 ================================================= -->
 
-            <!-- VEHÍCULO DENTRO -->
             <div
               class="resultado-accion"
-              *ngIf="vehiculoEncontrado.dentro">
-
+              *ngIf="vehiculoEncontrado.dentro"
+            >
 
               <p>
-
                 Hora de entrada:
 
                 <strong>
                   {{ vehiculoEncontrado.horaEntrada }}
                 </strong>
-
               </p>
-
 
               <button
                 type="button"
                 class="btn btn-danger"
-                (click)="registrarSalida()">
-
+                (click)="registrarSalida()"
+              >
                 Registrar salida
-
               </button>
 
             </div>
 
-
           </div>
 
 
+          <!-- =================================================
+               VEHÍCULO NO ENCONTRADO
+               ================================================= -->
 
-          <!-- VEHÍCULO NO ENCONTRADO -->
           <div
             class="vehiculo-no-encontrado"
-            *ngIf="!vehiculoEncontrado">
-
+            *ngIf="!vehiculoEncontrado"
+          >
 
             <p>
 
@@ -242,14 +271,12 @@
 
             </p>
 
-
             <button
               type="button"
               class="btn ucad-boton-principal"
-              (click)="mostrarRegistroVehiculo()">
-
+              (click)="mostrarRegistroVehiculo()"
+            >
               Registrar vehículo
-
             </button>
 
           </div>
@@ -260,16 +287,170 @@
       </div>
 
 
+      <!-- =====================================================
+           RESUMEN DE COBRO
+           ===================================================== -->
 
-      <!-- FORMULARIO DE REGISTRO -->
+      <div
+        class="card tarjeta-cobro"
+        *ngIf="resumenEstacionamiento"
+      >
+
+        <div class="card-header tarjeta-cobro__encabezado">
+
+          <h5>
+            Resumen de estacionamiento
+          </h5>
+
+          <p>
+            Salida registrada correctamente.
+          </p>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+          <!-- INFORMACIÓN -->
+
+          <div class="cobro-informacion">
+
+
+            <!-- PLACA -->
+
+            <div>
+
+              <span>Placa</span>
+
+              <strong>
+                {{ resumenEstacionamiento.placa }}
+              </strong>
+
+            </div>
+
+
+            <!-- PROPIETARIO -->
+
+            <div>
+
+              <span>Propietario</span>
+
+              <strong>
+                {{ resumenEstacionamiento.propietario }}
+              </strong>
+
+            </div>
+
+
+            <!-- TIPO DE USUARIO -->
+
+            <div>
+
+              <span>Tipo de usuario</span>
+
+              <strong>
+                {{ resumenEstacionamiento.tipoUsuario }}
+              </strong>
+
+            </div>
+
+
+            <!-- ENTRADA -->
+
+            <div>
+
+              <span>Entrada</span>
+
+              <strong>
+                {{ resumenEstacionamiento.horaEntrada }}
+              </strong>
+
+            </div>
+
+
+            <!-- SALIDA -->
+
+            <div>
+
+              <span>Salida</span>
+
+              <strong>
+                {{ resumenEstacionamiento.horaSalida }}
+              </strong>
+
+            </div>
+
+
+            <!-- TIEMPO -->
+
+            <div>
+
+              <span>Tiempo estacionado</span>
+
+              <strong>
+                {{ resumenEstacionamiento.tiempoEstacionado }}
+              </strong>
+
+            </div>
+
+
+          </div>
+
+
+          <!-- =================================================
+               INFORMACIÓN DEL COBRO
+               ================================================= -->
+
+          <div class="resultado-accion">
+
+            <p>
+              {{ obtenerMensajeCobro() }}
+            </p>
+
+          </div>
+
+
+          <!-- =================================================
+               TOTAL
+               ================================================= -->
+
+          <div class="cobro-total">
+
+            <span>
+              Total a pagar
+            </span>
+
+            <strong>
+              $
+              {{
+                resumenEstacionamiento.totalPagar
+                  | number:'1.2-2'
+              }}
+            </strong>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           FORMULARIO DE REGISTRO DE VEHÍCULO
+           ===================================================== -->
+
       <div
         class="card tarjeta-registro"
-        *ngIf="mostrarFormulario">
-
+        *ngIf="mostrarFormulario"
+      >
 
         <div class="card-header">
 
-          <h5>Registrar nuevo vehículo</h5>
+          <h5>
+            Registrar nuevo vehículo
+          </h5>
 
           <p>
             Complete la información del vehículo.
@@ -280,22 +461,26 @@
 
         <div class="card-body">
 
-
           <form
             #formularioVehiculo="ngForm"
-            (ngSubmit)="registrarVehiculo()">
+            (ngSubmit)="registrarVehiculo()"
+          >
 
+
+            <!-- =================================================
+                 PLACA Y TIPO DE USUARIO
+                 ================================================= -->
 
             <div class="form-row">
 
 
               <!-- PLACA -->
+
               <div class="form-group col-md-6">
 
                 <label for="nuevaPlaca">
                   Número de placa
                 </label>
-
 
                 <input
                   type="text"
@@ -303,47 +488,51 @@
                   name="placa"
                   class="form-control"
                   [(ngModel)]="nuevoVehiculo.placa"
-                  readonly>
+                  readonly
+                >
 
               </div>
 
 
-
               <!-- TIPO DE USUARIO -->
+
               <div class="form-group col-md-6">
 
                 <label for="tipoUsuario">
                   Tipo de usuario
                 </label>
 
-
                 <select
                   id="tipoUsuario"
                   name="tipoUsuario"
                   class="form-control"
                   [(ngModel)]="nuevoVehiculo.tipoUsuario"
-                  required>
-
+                  required
+                >
 
                   <option value="">
                     Seleccione una opción
                   </option>
 
-
                   <option value="Estudiante">
                     Estudiante
                   </option>
-
 
                   <option value="Docente">
                     Docente
                   </option>
 
+                  <option value="Empleado administrativo">
+                    Empleado administrativo
+                  </option>
+
+                  <option value="Vigilante">
+                    Vigilante
+                  </option>
 
                   <option value="Invitado">
                     Invitado
                   </option>
-
 
                 </select>
 
@@ -352,14 +541,15 @@
             </div>
 
 
+            <!-- =================================================
+                 PROPIETARIO
+                 ================================================= -->
 
-            <!-- PROPIETARIO -->
             <div class="form-group">
 
               <label for="propietario">
                 Nombre del propietario
               </label>
-
 
               <input
                 type="text"
@@ -368,22 +558,26 @@
                 class="form-control"
                 placeholder="Ingrese el nombre completo"
                 [(ngModel)]="nuevoVehiculo.propietario"
-                required>
+                required
+              >
 
             </div>
 
 
+            <!-- =================================================
+                 DATOS DEL VEHÍCULO
+                 ================================================= -->
 
             <div class="form-row">
 
 
               <!-- MARCA -->
+
               <div class="form-group col-md-4">
 
                 <label for="marca">
                   Marca
                 </label>
-
 
                 <input
                   type="text"
@@ -392,19 +586,19 @@
                   class="form-control"
                   placeholder="Ej. Toyota"
                   [(ngModel)]="nuevoVehiculo.marca"
-                  required>
+                  required
+                >
 
               </div>
 
 
-
               <!-- MODELO -->
+
               <div class="form-group col-md-4">
 
                 <label for="modelo">
                   Modelo
                 </label>
-
 
                 <input
                   type="text"
@@ -413,19 +607,19 @@
                   class="form-control"
                   placeholder="Ej. Corolla"
                   [(ngModel)]="nuevoVehiculo.modelo"
-                  required>
+                  required
+                >
 
               </div>
 
 
-
               <!-- COLOR -->
+
               <div class="form-group col-md-4">
 
                 <label for="color">
                   Color
                 </label>
-
 
                 <input
                   type="text"
@@ -434,37 +628,35 @@
                   class="form-control"
                   placeholder="Ej. Blanco"
                   [(ngModel)]="nuevoVehiculo.color"
-                  required>
+                  required
+                >
 
               </div>
 
             </div>
 
 
+            <!-- =================================================
+                 BOTONES
+                 ================================================= -->
 
-            <!-- BOTONES -->
             <div class="registro-acciones">
-
 
               <button
                 type="button"
                 class="btn btn-secondary"
-                (click)="cancelarRegistroVehiculo()">
-
+                (click)="cancelarRegistroVehiculo()"
+              >
                 Cancelar
-
               </button>
-
 
               <button
                 type="submit"
                 class="btn ucad-boton-principal"
-                [disabled]="formularioVehiculo.invalid">
-
+                [disabled]="formularioVehiculo.invalid"
+              >
                 Registrar vehículo
-
               </button>
-
 
             </div>
 

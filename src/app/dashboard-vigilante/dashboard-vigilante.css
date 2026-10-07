@@ -4,7 +4,9 @@
 }
 
 
-/* ENCABEZADO */
+/* =====================================================
+   ENCABEZADO
+   ===================================================== */
 
 .vigilante-encabezado {
   display: flex;
@@ -38,17 +40,23 @@
 }
 
 
-/* CONTENIDO */
+/* =====================================================
+   CONTENIDO
+   ===================================================== */
 
 .vigilante-contenido {
   padding: 30px;
 }
 
 
-/* TARJETAS */
+/* =====================================================
+   TARJETAS
+   ===================================================== */
 
 .tarjeta-busqueda,
-.tarjeta-resultado {
+.tarjeta-resultado,
+.tarjeta-registro,
+.tarjeta-cobro {
   max-width: 850px;
 
   margin: 0 auto 25px;
@@ -58,6 +66,11 @@
   box-shadow:
     0 5px 20px rgba(0, 0, 0, 0.08);
 }
+
+
+/* =====================================================
+   ENCABEZADO DE TARJETAS
+   ===================================================== */
 
 .card-header {
   background-color: #ffffff;
@@ -83,7 +96,9 @@
 }
 
 
-/* INFORMACIÓN DEL VEHÍCULO */
+/* =====================================================
+   INFORMACIÓN DEL VEHÍCULO
+   ===================================================== */
 
 .vehiculo-informacion {
   display: grid;
@@ -117,7 +132,9 @@
 }
 
 
-/* ESTADO */
+/* =====================================================
+   ESTADO
+   ===================================================== */
 
 .badge {
   width: fit-content;
@@ -133,11 +150,14 @@
 
 .badge-warning {
   background-color: #f5b800;
+
   color: #ffffff;
 }
 
 
-/* ACCIONES */
+/* =====================================================
+   ACCIONES
+   ===================================================== */
 
 .resultado-accion {
   padding-top: 20px;
@@ -150,7 +170,9 @@
 }
 
 
-/* NO ENCONTRADO */
+/* =====================================================
+   VEHÍCULO NO ENCONTRADO
+   ===================================================== */
 
 .vehiculo-no-encontrado {
   padding: 20px;
@@ -171,39 +193,12 @@
 }
 
 
-/* RESPONSIVE */
-
-@media (max-width: 768px) {
-
-  .vigilante-encabezado {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 15px;
-  }
-
-  .vigilante-usuario {
-    width: 100%;
-
-    justify-content: space-between;
-  }
-
-  .vehiculo-informacion {
-    grid-template-columns: 1fr;
-  }
-
-  /* REGISTRO DE VEHÍCULO */
+/* =====================================================
+   REGISTRO DE VEHÍCULO
+   ===================================================== */
 
 .tarjeta-registro {
-  max-width: 850px;
-
-  margin: 0 auto 25px;
-
-  border: none;
-
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
 }
 
 .tarjeta-registro .form-group {
@@ -244,5 +239,161 @@
 
   border-top: 1px solid #e5e5e5;
 }
+
+
+/* =====================================================
+   RESUMEN DE COBRO
+   ===================================================== */
+
+.tarjeta-cobro {
+  width: 100%;
+
+  max-width: 850px;
+
+  margin: 25px auto 0;
+
+  border-top: 4px solid var(--ucad-dorado);
+
+  overflow: hidden;
+}
+
+
+/* ENCABEZADO DEL COBRO */
+
+.tarjeta-cobro__encabezado {
+  background-color: var(--ucad-azul);
+
+  color: var(--ucad-blanco);
+}
+
+.tarjeta-cobro__encabezado h5 {
+  margin-bottom: 5px;
+
+  color: var(--ucad-blanco);
+}
+
+.tarjeta-cobro__encabezado p {
+  margin: 0;
+
+  color: var(--ucad-blanco);
+
+  font-size: 13px;
+
+  opacity: 0.85;
+}
+
+
+/* INFORMACIÓN DEL COBRO */
+
+.cobro-informacion {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.cobro-informacion div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.cobro-informacion span {
+  color: #666666;
+
+  font-size: 13px;
+}
+
+.cobro-informacion strong {
+  color: var(--ucad-azul);
+
+  font-size: 15px;
+}
+
+
+/* TOTAL A PAGAR */
+
+.cobro-total {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 25px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.cobro-total span {
+  color: var(--ucad-azul);
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.cobro-total strong {
+  color: var(--ucad-azul);
+
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .vigilante-encabezado {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .vigilante-usuario {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .vigilante-contenido {
+    padding: 20px 15px;
+  }
+
+  .vehiculo-informacion {
+    grid-template-columns: 1fr;
+  }
+
+  .cobro-informacion {
+    grid-template-columns: 1fr;
+  }
+
+  .cobro-total {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+  }
+
+  .registro-acciones {
+    flex-direction: column;
+  }
+
+  .registro-acciones .btn {
+    width: 100%;
+  }
 
 }
