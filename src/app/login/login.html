@@ -1,58 +1,143 @@
 <div class="login-pagina">
 
-  <div class="login-tarjeta">
+  <div class="login-overlay"></div>
 
-    <div class="login-tarjeta__marca">
-      <img src="/logo.jpeg">
-      <p>Sistema de Gestión y Control de Estacionamiento</p>
-    </div>
+  <div class="login-panel">
 
-    <form (submit)="iniciarSesion(); $event.preventDefault()">
+    <div class="login-tarjeta">
 
-  <div class="form-group">
-    <label for="correo">Correo electrónico</label>
+      <div class="login-marca">
 
-    <input
-      type="email"
-      id="correo"
-      class="form-control"
-      [(ngModel)]="correo"
-      name="correo"
-      placeholder="Ingrese su correo">
-  </div>
+        <img
+          src="/logo.jpeg"
+          alt="Logo de UCAD Parki">
 
-  <div class="form-group">
-    <label for="contrasena">Contraseña</label>
+        <h1>
+          UCAD Parki
+        </h1>
 
-    <input
-      type="password"
-      id="contrasena"
-      class="form-control"
-      [(ngModel)]="contrasena"
-      name="contrasena"
-      placeholder="Ingrese su contraseña">
-  </div>
+        <p>
+          Sistema de Gestión y Control de Estacionamiento
+        </p>
 
-  <div class="login-opciones">
-    <a href="#">¿Olvidaste tu contraseña?</a>
-  </div>
+      </div>
 
-  <div
-    *ngIf="mensaje"
-    class="alert alert-danger">
-    {{ mensaje }}
-  </div>
+      <form
+        (submit)="iniciarSesion(); $event.preventDefault()"
+        novalidate>
 
-  <button
-    type="submit"
-    class="btn btn-primary btn-block">
-    Iniciar sesión
-  </button>
+        <div class="form-group">
 
-</form>
+          <label for="correo">
+            Correo electrónico
+          </label>
 
-    <div class="login-tarjeta__pie">
-      <p>Universidad Cristiana de las Asambleas de Dios</p>
+          <div class="campo">
+
+            <i class="bi bi-envelope campo-icono"></i>
+
+            <input
+              type="email"
+              id="correo"
+              [(ngModel)]="correo"
+              name="correo"
+              placeholder="Ingrese su correo"
+              autocomplete="email">
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="contrasena">
+            Contraseña
+          </label>
+
+          <div class="campo">
+
+            <i class="bi bi-lock campo-icono"></i>
+
+            <input
+              [type]="mostrarContrasena ? 'text' : 'password'"
+              id="contrasena"
+              [(ngModel)]="contrasena"
+              name="contrasena"
+              placeholder="Ingrese su contraseña"
+              autocomplete="current-password">
+
+            <button
+              type="button"
+              class="btn-mostrar"
+              (click)="alternarContrasena()"
+              [attr.aria-label]="
+                mostrarContrasena
+                  ? 'Ocultar contraseña'
+                  : 'Mostrar contraseña'
+              ">
+
+              <i
+                class="bi"
+                [ngClass]="
+                  mostrarContrasena
+                    ? 'bi-eye-slash'
+                    : 'bi-eye'
+                ">
+              </i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="login-opciones">
+
+          <button
+            type="button"
+            class="btn-recuperar"
+            (click)="irARecuperarContrasena()">
+
+            <i class="bi bi-key"></i>
+
+            ¿Olvidaste tu contraseña?
+
+          </button>
+
+        </div>
+
+        <div
+          *ngIf="mensaje"
+          class="alert"
+          [ngClass]="'alert-' + tipoMensaje"
+          role="alert">
+
+          {{ mensaje }}
+
+        </div>
+
+        <button
+          type="submit"
+          class="btn-login">
+
+          <span>
+            Iniciar sesión
+          </span>
+
+          <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+      </form>
+
+      <div class="login-pie">
+
+        <p>
+          Universidad Cristiana de las Asambleas de Dios
+        </p>
+
+      </div>
+
     </div>
 
   </div>

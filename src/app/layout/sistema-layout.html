@@ -11,7 +11,9 @@
 
       <div>
 
-        <h1>UCAD Parki</h1>
+        <h1>
+          UCAD Parki
+        </h1>
 
         <p>
           Sistema de Gestión y Control de Estacionamiento
@@ -22,15 +24,30 @@
     </div>
 
 
+    <!-- INFORMACIÓN DEL USUARIO LOGUEADO -->
     <div class="sistema-usuario">
 
-      <span>
-        Usuario
-      </span>
+      <div class="usuario-informacion">
+
+        <strong>
+          {{ nombreUsuario }}
+        </strong>
+
+        <span>
+          {{ correoUsuario }}
+        </span>
+
+        <span class="usuario-rol">
+          {{ rolUsuario }}
+        </span>
+
+      </div>
+
 
       <button
         type="button"
-        class="btn btn-outline-light btn-sm">
+        class="btn btn-outline-light btn-sm"
+        (click)="cerrarSesion()">
 
         Cerrar sesión
 
@@ -41,7 +58,7 @@
   </header>
 
 
-  <!-- CONTENIDO DE LA VISTA -->
+  <!-- CONTENIDO DEL DASHBOARD -->
   <main class="sistema-contenido">
 
     <ng-content></ng-content>

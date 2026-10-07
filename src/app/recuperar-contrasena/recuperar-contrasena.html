@@ -1,0 +1,112 @@
+<div class="recuperar-pagina">
+
+  <div class="recuperar-overlay"></div>
+
+  <div class="recuperar-panel">
+
+    <div class="recuperar-tarjeta">
+
+      <div class="recuperar-marca">
+
+        <img
+          src="/logo.jpeg"
+          alt="Logo de UCAD Parki">
+
+        <h1>
+          Recuperar contraseña
+        </h1>
+
+        <p>
+          Ingrese su correo electrónico para recibir
+          el enlace de recuperación.
+        </p>
+
+      </div>
+
+      <form
+        (submit)="enviarEnlace(); $event.preventDefault()"
+        novalidate>
+
+        <div class="recuperar-form-group">
+
+          <label for="correo">
+            Correo electrónico
+          </label>
+
+          <div class="recuperar-campo">
+
+            <i class="bi bi-envelope recuperar-icono"></i>
+
+            <input
+              type="email"
+              id="correo"
+              class="recuperar-input"
+              [(ngModel)]="correo"
+              name="correo"
+              placeholder="Ingrese su correo"
+              autocomplete="email">
+
+          </div>
+
+        </div>
+
+        <div
+          *ngIf="mensaje"
+          class="recuperar-alert"
+          [ngClass]="'recuperar-alert-' + tipoMensaje"
+          role="alert">
+
+          {{ mensaje }}
+
+        </div>
+
+        <button
+          type="submit"
+          class="btn-recuperar-enlace"
+          [disabled]="enviando">
+
+          <i
+            class="bi"
+            [ngClass]="
+              enviando
+                ? 'bi-hourglass-split'
+                : 'bi-envelope-arrow-up'
+            ">
+          </i>
+
+          <span *ngIf="!enviando">
+            Enviar enlace de recuperación
+          </span>
+
+          <span *ngIf="enviando">
+            Enviando...
+          </span>
+
+        </button>
+
+        <button
+          type="button"
+          class="btn-volver"
+          (click)="volverAlLogin()">
+
+          <i class="bi bi-arrow-left"></i>
+
+          Volver al inicio de sesión
+
+        </button>
+
+      </form>
+
+      <div class="recuperar-pie">
+
+        <p>
+          Universidad Cristiana de las Asambleas de Dios
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

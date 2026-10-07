@@ -1,0 +1,352 @@
+.recuperar-pagina {
+  min-height: 100vh;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px 20px;
+
+  box-sizing: border-box;
+
+  background-image: url('/fondo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.recuperar-overlay {
+  position: absolute;
+  inset: 0;
+
+  background-color: rgba(0, 0, 0, 0.08);
+
+  pointer-events: none;
+}
+
+.recuperar-panel {
+  position: relative;
+  z-index: 1;
+
+  width: 400px;
+  max-width: 100%;
+
+  padding: 38px 35px;
+
+  box-sizing: border-box;
+
+  background-color: rgba(255, 255, 255, 0.97);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.recuperar-tarjeta {
+  width: 100%;
+}
+
+
+/* MARCA */
+
+.recuperar-marca {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.recuperar-marca img {
+  display: block;
+
+  width: 68px;
+  height: 68px;
+
+  margin: 0 auto 14px;
+
+  object-fit: contain;
+
+  border-radius: 9px;
+}
+
+.recuperar-marca h1 {
+  margin: 0;
+
+  color: var(--ucad-azul);
+
+  font-size: 25px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.recuperar-marca p {
+  max-width: 300px;
+
+  margin: 8px auto 0;
+
+  color: #7a8694;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* FORMULARIO */
+
+.recuperar-form-group {
+  width: 100%;
+
+  margin-bottom: 18px;
+}
+
+.recuperar-form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #263238;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* CAMPO */
+
+.recuperar-campo {
+  position: relative;
+
+  width: 100%;
+}
+
+.recuperar-icono {
+  position: absolute;
+
+  left: 13px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #718096;
+
+  font-size: 15px;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+.recuperar-input {
+  display: block;
+
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 10px 13px 10px 39px;
+
+  border: 1px solid #d4dce5;
+  border-radius: 7px;
+
+  background-color: #ffffff;
+
+  color: #263238;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  outline: none;
+
+  appearance: none;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.recuperar-input::placeholder {
+  color: #9aa5b1;
+}
+
+.recuperar-input:hover {
+  border-color: #b8c4d0;
+}
+
+.recuperar-input:focus {
+  border-color: var(--ucad-azul);
+
+  box-shadow:
+    0 0 0 2px rgba(11, 70, 121, 0.10);
+}
+
+
+/* MENSAJE */
+
+.recuperar-alert {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  margin-bottom: 15px;
+
+  padding: 10px 12px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+.recuperar-alert-danger {
+  background-color: #fce8e8;
+
+  color: #a61b1b;
+}
+
+.recuperar-alert-success {
+  background-color: #e5f5eb;
+
+  color: #176b3a;
+}
+
+
+/* BOTÓN PRINCIPAL */
+
+.btn-recuperar-enlace {
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 15px;
+
+  border: none;
+  border-radius: 7px;
+
+  background-color: var(--ucad-azul);
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.btn-recuperar-enlace i {
+  font-size: 15px;
+}
+
+.btn-recuperar-enlace:hover:not(:disabled) {
+  background-color: #084f87;
+
+  box-shadow:
+    0 5px 12px rgba(11, 70, 121, 0.20);
+}
+
+.btn-recuperar-enlace:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* VOLVER */
+
+.btn-volver {
+  width: 100%;
+
+  margin-top: 14px;
+
+  padding: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--ucad-azul);
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.btn-volver i {
+  font-size: 13px;
+}
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
+
+/* PIE */
+
+.recuperar-pie {
+  margin-top: 25px;
+
+  padding-top: 16px;
+
+  border-top: 1px solid #e5e9ee;
+
+  text-align: center;
+}
+
+.recuperar-pie p {
+  margin: 0;
+
+  color: #8a949e;
+
+  font-size: 10px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 480px) {
+
+  .recuperar-pagina {
+    padding: 20px 15px;
+  }
+
+  .recuperar-panel {
+    width: 100%;
+
+    padding: 30px 22px;
+
+    border-radius: 14px;
+  }
+
+  .recuperar-marca {
+    margin-bottom: 25px;
+  }
+
+  .recuperar-marca h1 {
+    font-size: 23px;
+  }
+
+}
