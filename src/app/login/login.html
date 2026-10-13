@@ -1,13 +1,8 @@
 <div class="login-pagina">
-
   <div class="login-overlay"></div>
-
   <div class="login-panel">
-
     <div class="login-tarjeta">
-
       <div class="login-marca">
-
         <img
           src="/logo.jpeg"
           alt="Logo de UCAD Parki">
@@ -19,23 +14,17 @@
         <p>
           Sistema de Gestión y Control de Estacionamiento
         </p>
-
       </div>
 
       <form
         (submit)="iniciarSesion(); $event.preventDefault()"
         novalidate>
-
         <div class="form-group">
-
           <label for="correo">
             Correo electrónico
           </label>
-
           <div class="campo">
-
             <i class="bi bi-envelope campo-icono"></i>
-
             <input
               type="email"
               id="correo"
@@ -43,21 +32,15 @@
               name="correo"
               placeholder="Ingrese su correo"
               autocomplete="email">
-
           </div>
-
         </div>
 
         <div class="form-group">
-
           <label for="contrasena">
             Contraseña
           </label>
-
           <div class="campo">
-
             <i class="bi bi-lock campo-icono"></i>
-
             <input
               [type]="mostrarContrasena ? 'text' : 'password'"
               id="contrasena"
@@ -65,7 +48,6 @@
               name="contrasena"
               placeholder="Ingrese su contraseña"
               autocomplete="current-password">
-
             <button
               type="button"
               class="btn-mostrar"
@@ -75,7 +57,6 @@
                   ? 'Ocultar contraseña'
                   : 'Mostrar contraseña'
               ">
-
               <i
                 class="bi"
                 [ngClass]="
@@ -84,26 +65,19 @@
                     : 'bi-eye'
                 ">
               </i>
-
             </button>
-
           </div>
-
         </div>
 
         <div class="login-opciones">
-
           <button
             type="button"
             class="btn-recuperar"
             (click)="irARecuperarContrasena()">
 
             <i class="bi bi-key"></i>
-
             ¿Olvidaste tu contraseña?
-
           </button>
-
         </div>
 
         <div
@@ -111,9 +85,7 @@
           class="alert"
           [ngClass]="'alert-' + tipoMensaje"
           role="alert">
-
           {{ mensaje }}
-
         </div>
 
         <button
@@ -123,11 +95,9 @@
           <span>
             Iniciar sesión
           </span>
-
           <i class="bi bi-arrow-right"></i>
 
         </button>
-
       </form>
 
       <div class="login-pie">
@@ -135,11 +105,9 @@
         <p>
           Universidad Cristiana de las Asambleas de Dios
         </p>
-
       </div>
 
     </div>
-
   </div>
 
 </div>

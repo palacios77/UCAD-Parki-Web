@@ -1,0 +1,232 @@
+<div class="salida-pagina">
+
+  <div class="salida-titulo">
+
+    <h1>Registrar salida</h1>
+
+    <p>
+      Busca la placa para registrar la salida de un vehículo.
+    </p>
+
+  </div>
+
+
+  <section class="salida-card">
+
+    <div class="salida-card-header">
+
+      <div class="salida-icono">
+        <i class="bi bi-box-arrow-right"></i>
+      </div>
+
+      <div>
+
+        <h2>Salida de vehículo</h2>
+
+        <p>
+          Ingrese el número de placa.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="salida-buscador">
+
+      <label for="placa">
+        Número de placa
+      </label>
+
+      <div class="salida-campo">
+
+        <input
+          type="text"
+          id="placa"
+          [(ngModel)]="placa"
+          placeholder="Ejemplo: ABC-123"
+          maxlength="10"
+          [disabled]="buscando() || procesandoSalida()"
+          (keyup.enter)="buscarSesion()">
+
+        <button
+          type="button"
+          (click)="buscarSesion()"
+          [disabled]="buscando() || procesandoSalida()">
+
+          <i
+            class="bi"
+            [ngClass]="
+              buscando()
+                ? 'bi-hourglass-split'
+                : 'bi-search'
+            ">
+          </i>
+
+          <span *ngIf="!buscando()">
+            Buscar
+          </span>
+
+          <span *ngIf="buscando()">
+            Buscando...
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div
+    *ngIf="mensaje()"
+    class="salida-mensaje"
+    [ngClass]="{
+      'mensaje-exito': tipoMensaje() === 'exito',
+      'mensaje-error': tipoMensaje() === 'error'
+    }">
+
+    <i
+      class="bi"
+      [ngClass]="{
+        'bi-check-circle': tipoMensaje() === 'exito',
+        'bi-exclamation-circle': tipoMensaje() === 'error'
+      }">
+    </i>
+
+    {{ mensaje() }}
+
+  </div>
+
+
+  <section
+    *ngIf="sesionEncontrada()"
+    class="salida-card sesion-card">
+
+    <div class="card-titulo">
+
+      <h2>
+        Vehículo dentro del estacionamiento
+      </h2>
+
+      <p>
+        Revise los datos antes de registrar la salida.
+      </p>
+
+    </div>
+
+
+    <div class="sesion-datos">
+
+      <div>
+
+        <span>
+          Placa
+        </span>
+
+        <strong>
+          {{ sesionEncontrada().placa }}
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Tipo de usuario
+        </span>
+
+        <strong>
+          {{ sesionEncontrada().tipoUsuario }}
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Fecha de entrada
+        </span>
+
+        <strong>
+          {{
+            sesionEncontrada().fechaEntrada.toDate()
+              | date:'dd/MM/yyyy HH:mm'
+          }}
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Estado
+        </span>
+
+        <strong class="estado-abierta">
+          {{ sesionEncontrada().estado }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="cobro-panel">
+
+      <div class="cobro-info">
+
+        <span>
+          Cobro calculado
+        </span>
+
+        <strong>
+          ${{ montoCalculado() | number:'1.2-2' }}
+        </strong>
+
+      </div>
+
+      <p>
+        El monto se calcula según el tiempo de permanencia.
+      </p>
+
+    </div>
+
+
+    <div class="salida-accion">
+
+      <button
+        type="button"
+        class="btn-salida"
+        (click)="registrarSalida()"
+        [disabled]="procesandoSalida()">
+
+        <i
+          class="bi"
+          [ngClass]="
+            procesandoSalida()
+              ? 'bi-hourglass-split'
+              : 'bi-box-arrow-right'
+          ">
+        </i>
+
+        <span *ngIf="!procesandoSalida()">
+          Registrar salida
+        </span>
+
+        <span *ngIf="procesandoSalida()">
+          Registrando...
+        </span>
+
+      </button>
+
+    </div>
+
+  </section>
+
+</div>

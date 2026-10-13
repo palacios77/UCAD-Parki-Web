@@ -1,90 +1,236 @@
 .sistema {
   min-height: 100vh;
-  background-color: var(--ucad-fondo);
+  display: flex;
+  background-color: #f4f7fb;
 }
 
-.sistema-encabezado {
-  min-height: 75px;
-  padding: 12px 30px;
+
+/* SIDEBAR */
+
+.sistema-sidebar {
+  width: 225px;
+  min-width: 225px;
+  min-height: 100vh;
+  background-color: #073b6b;
+  color: #ffffff;
+}
+
+.sidebar-marca {
+  height: 82px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.sistema-marca {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.sistema-marca img {
-  width: 52px;
-  height: 52px;
+.sidebar-marca img {
+  width: 43px;
+  height: 43px;
   object-fit: contain;
-  background-color: var(--ucad-blanco);
-  border-radius: 6px;
-  padding: 4px;
+  background-color: #ffffff;
+  border-radius: 5px;
 }
 
-.sistema-marca h1 {
+.sidebar-marca h2 {
   margin: 0;
-  font-size: 23px;
-  font-weight: 600;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
 }
 
-.sistema-marca p {
-  margin: 3px 0 0;
-  font-size: 12px;
-  opacity: 0.85;
+.sidebar-marca span {
+  display: block;
+  margin-top: 3px;
+  color: #b9d0e5;
+  font-size: 11px;
 }
 
-.sistema-usuario {
+.sidebar-menu {
+  padding: 18px 12px;
+}
+
+.menu-item {
+  width: 100%;
+  height: 45px;
+  margin-bottom: 7px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  color: #d6e5f2;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.usuario-informacion {
+.menu-item i {
+  width: 18px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.menu-item.activo {
+  background-color: #087bd1;
+  color: #ffffff;
+}
+
+
+/* CONTENIDO */
+
+.sistema-principal {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+}
+
+.sistema-barra {
+  height: 64px;
+  flex-shrink: 0;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dce3ea;
+}
+
+.barra-derecha {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.boton-notificacion {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: #526273;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.boton-notificacion span {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #e33434;
+}
+
+.usuario-barra {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.usuario-avatar {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  line-height: 1.2;
-}
-
-.usuario-informacion strong {
+  border-radius: 50%;
+  background-color: #086aa8;
+  color: #ffffff;
   font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
+  font-weight: 700;
 }
 
-.usuario-informacion span {
-  font-size: 11px;
-  opacity: 0.9;
-  white-space: nowrap;
+.usuario-datos {
+  display: flex;
+  flex-direction: column;
 }
 
-.usuario-informacion .usuario-rol {
-  margin-top: 3px;
+.usuario-datos strong {
+  color: #27384a;
+  font-size: 12px;
+}
+
+.usuario-datos small {
+  margin-top: 2px;
+  color: #8793a0;
+  font-size: 10px;
+}
+
+.boton-salir {
+  height: 32px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d8e0e8;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #687686;
+  font-family: inherit;
   font-size: 11px;
-  font-weight: 600;
-  opacity: 1;
+  cursor: pointer;
+}
+
+.boton-salir:hover {
+  background-color: #f5f7f9;
+  color: #073b6b;
 }
 
 .sistema-contenido {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
-@media (max-width: 768px) {
-  .sistema-encabezado {
-    padding: 15px 20px;
+
+/* RESPONSIVE */
+
+@media (max-width: 760px) {
+
+  .sistema-sidebar {
+    width: 68px;
+    min-width: 68px;
   }
 
-  .sistema-marca p {
+  .sidebar-marca {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sidebar-marca img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sidebar-marca div {
     display: none;
   }
 
-  .usuario-informacion {
+  .sidebar-menu {
+    padding: 14px 8px;
+  }
+
+  .menu-item {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .menu-item span {
+    display: none;
+  }
+
+  .usuario-datos {
     display: none;
   }
 }

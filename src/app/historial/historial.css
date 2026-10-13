@@ -1,0 +1,165 @@
+.historial-pagina {
+  padding: 32px;
+}
+
+.historial-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.historial-titulo h1 {
+  margin: 0;
+  color: #073f73;
+  font-size: 28px;
+}
+
+.historial-titulo p {
+  margin: 6px 0 0;
+  color: #718096;
+}
+
+.btn-recargar {
+  border: 1px solid #d8e0e8;
+  background: white;
+  color: #536273;
+  border-radius: 5px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.historial-card {
+  background: white;
+  border: 1px solid #e1e7ef;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 20px 22px;
+  border-bottom: 1px solid #e5eaf0;
+}
+
+.card-header h2 {
+  margin: 0;
+  color: #123f6b;
+  font-size: 19px;
+}
+
+.card-header p {
+  margin: 5px 0 0;
+  color: #7b8794;
+  font-size: 13px;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f6f8fb;
+}
+
+th,
+td {
+  padding: 15px 18px;
+  text-align: left;
+  border-bottom: 1px solid #edf0f4;
+  font-size: 14px;
+}
+
+th {
+  color: #536273;
+  font-weight: 600;
+}
+
+td {
+  color: #465568;
+}
+
+td strong {
+  color: #123f6b;
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estado-punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.estado-abierta {
+  background: #fff4db;
+  color: #9a6700;
+}
+
+.estado-abierta .estado-punto {
+  background: #e0a800;
+}
+
+.estado-cerrada {
+  background: #e5f7ec;
+  color: #19733c;
+}
+
+.estado-cerrada .estado-punto {
+  background: #28a745;
+}
+
+.sin-salida {
+  color: #9a6700;
+}
+
+.estado-carga,
+.estado-vacio {
+  padding: 55px 20px;
+  text-align: center;
+  color: #718096;
+}
+
+.estado-vacio i {
+  font-size: 36px;
+  color: #9aa8b7;
+}
+
+.estado-vacio h3 {
+  color: #465568;
+  margin: 12px 0 6px;
+}
+
+.estado-vacio p {
+  margin: 0;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .historial-pagina {
+    padding: 20px;
+  }
+
+  .historial-titulo {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+}

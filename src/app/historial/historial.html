@@ -1,0 +1,155 @@
+<div class="historial-pagina">
+
+  <div class="historial-titulo">
+    <div>
+      <h1>Historial</h1>
+      <p>Consulta las entradas y salidas registradas.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-recargar"
+      (click)="cargarHistorial()"
+      [disabled]="cargando()">
+
+      <i class="bi bi-arrow-clockwise"></i>
+      Actualizar
+
+    </button>
+  </div>
+
+  <section class="historial-card">
+
+    <div class="card-header">
+
+      <div>
+        <h2>Movimientos registrados</h2>
+
+        <p>
+          {{ historial().length }} movimiento(s)
+        </p>
+      </div>
+
+    </div>
+
+    <div
+      *ngIf="cargando()"
+      class="estado-carga">
+
+      <i class="bi bi-hourglass-split"></i>
+
+      <span>Cargando historial...</span>
+
+    </div>
+
+    <div
+      *ngIf="!cargando() && historial().length === 0"
+      class="estado-vacio">
+
+      <i class="bi bi-clock-history"></i>
+
+      <h3>No hay movimientos registrados</h3>
+
+      <p>
+        Las entradas y salidas aparecerán aquí.
+      </p>
+
+    </div>
+
+    <div
+      *ngIf="!cargando() && historial().length > 0"
+      class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Placa</th>
+            <th>Tipo de usuario</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Tiempo</th>
+            <th>Cobro</th>
+            <th>Estado</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let sesion of historial()">
+
+            <td>
+              <strong>
+                {{ sesion.placa }}
+              </strong>
+            </td>
+
+            <td>
+              {{ sesion.tipoUsuario }}
+            </td>
+
+            <td>
+              {{
+                sesion.fechaEntrada
+                  | date:'dd/MM/yyyy HH:mm'
+              }}
+            </td>
+
+            <td>
+
+              <span *ngIf="sesion.fechaSalida">
+                {{
+                  sesion.fechaSalida
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+
+              <span
+                *ngIf="!sesion.fechaSalida"
+                class="sin-salida">
+                Pendiente
+              </span>
+
+            </td>
+
+            <td>
+              {{ sesion.tiempoEstacionado || 'En curso' }}
+            </td>
+
+            <td>
+              <strong>
+                ${{ sesion.monto | number:'1.2-2' }}
+              </strong>
+            </td>
+
+            <td>
+
+              <span
+                class="estado"
+                [ngClass]="
+                  sesion.estado === 'Abierta'
+                    ? 'estado-abierta'
+                    : 'estado-cerrada'
+                ">
+
+                <span class="estado-punto"></span>
+
+                {{ sesion.estado }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

@@ -1,675 +1,217 @@
-<app-sistema-layout>
+<div class="inicio-pagina">
 
-  <div class="vigilante-pagina">
+  <div class="inicio-titulo">
 
-    <main class="vigilante-contenido">
+    <div>
+      <h1>Inicio</h1>
+      <p>Resumen actual del estacionamiento.</p>
+    </div>
 
-      <!-- =====================================================
-           BUSCADOR
-           ===================================================== -->
+    <button
+      type="button"
+      class="btn-actualizar"
+      (click)="cargarInicio()"
+      [disabled]="cargando()">
 
-      <div class="card tarjeta-busqueda">
+      <i class="bi bi-arrow-clockwise"></i>
+      Actualizar
 
-        <div class="card-header">
-
-          <h5>Registro de entrada y salida</h5>
-
-          <p>
-            Ingrese el número de placa para consultar el vehículo.
-          </p>
-
-        </div>
-
-        <div class="card-body">
-
-          <div class="form-group">
-
-            <label for="placa">
-              Número de placa
-            </label>
-
-            <div class="input-group">
-
-              <input
-                type="text"
-                id="placa"
-                class="form-control"
-                placeholder="Ejemplo: ABC-123"
-                [(ngModel)]="placa"
-                maxlength="10"
-                (keyup.enter)="buscarVehiculo()"
-              >
-
-              <div class="input-group-append">
-
-                <button
-                  type="button"
-                  class="btn ucad-boton-principal"
-                  (click)="buscarVehiculo()"
-                >
-                  Buscar
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           MENSAJE
-           ===================================================== -->
-
-      <div
-        *ngIf="mensaje"
-        class="alert"
-        [ngClass]="{
-          'alert-success': tipoMensaje === 'exito',
-          'alert-danger': tipoMensaje === 'error'
-        }"
-      >
-        {{ mensaje }}
-      </div>
-
-
-      <!-- =====================================================
-           RESULTADO DEL VEHÍCULO
-           ===================================================== -->
-
-      <div
-        class="card tarjeta-resultado"
-        *ngIf="mostrarResultado"
-      >
-
-        <div class="card-header">
-
-          <h5>Información del vehículo</h5>
-
-        </div>
-
-
-        <div class="card-body">
-
-
-          <!-- =================================================
-               VEHÍCULO ENCONTRADO
-               ================================================= -->
-
-          <div *ngIf="vehiculoEncontrado">
-
-            <div class="vehiculo-informacion">
-
-              <!-- PLACA -->
-
-              <div>
-
-                <span>Placa</span>
-
-                <strong>
-                  {{ vehiculoEncontrado.placa }}
-                </strong>
-
-              </div>
-
-
-              <!-- PROPIETARIO -->
-
-              <div>
-
-                <span>Propietario</span>
-
-                <strong>
-                  {{ vehiculoEncontrado.propietario }}
-                </strong>
-
-              </div>
-
-
-              <!-- TIPO DE USUARIO -->
-
-              <div>
-
-                <span>Tipo de usuario</span>
-
-                <strong>
-                  {{ vehiculoEncontrado.tipoUsuario }}
-                </strong>
-
-              </div>
-
-
-              <!-- VEHÍCULO -->
-
-              <div>
-
-                <span>Vehículo</span>
-
-                <strong>
-                  {{ vehiculoEncontrado.marca }}
-                  {{ vehiculoEncontrado.modelo }}
-                </strong>
-
-              </div>
-
-
-              <!-- COLOR -->
-
-              <div>
-
-                <span>Color</span>
-
-                <strong>
-                  {{ vehiculoEncontrado.color }}
-                </strong>
-
-              </div>
-
-
-              <!-- ESTADO -->
-
-              <div>
-
-                <span>Estado</span>
-
-                <span
-                  class="badge"
-                  [ngClass]="
-                    vehiculoEncontrado.dentro
-                      ? 'ucad-estado-advertencia'
-                      : 'ucad-estado-exitoso'
-                  "
-                >
-                  {{
-                    vehiculoEncontrado.dentro
-                      ? 'Dentro'
-                      : 'Fuera'
-                  }}
-                </span>
-
-              </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 VEHÍCULO FUERA → REGISTRAR ENTRADA
-                 ================================================= -->
-
-            <div
-              class="resultado-accion"
-              *ngIf="!vehiculoEncontrado.dentro"
-            >
-
-              <p>
-                El vehículo se encuentra fuera
-                del estacionamiento.
-              </p>
-
-              <button
-                type="button"
-                class="btn ucad-boton-principal"
-                (click)="registrarEntrada()"
-              >
-                Registrar entrada
-              </button>
-
-            </div>
-
-
-            <!-- =================================================
-                 VEHÍCULO DENTRO → REGISTRAR SALIDA
-                 ================================================= -->
-
-            <div
-              class="resultado-accion"
-              *ngIf="vehiculoEncontrado.dentro"
-            >
-
-              <p>
-                Hora de entrada:
-
-                <strong>
-                  {{ vehiculoEncontrado.horaEntrada }}
-                </strong>
-              </p>
-
-              <button
-                type="button"
-                class="btn btn-danger"
-                (click)="registrarSalida()"
-              >
-                Registrar salida
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <!-- =================================================
-               VEHÍCULO NO ENCONTRADO
-               ================================================= -->
-
-          <div
-            class="vehiculo-no-encontrado"
-            *ngIf="!vehiculoEncontrado"
-          >
-
-            <p>
-
-              No se encontró ningún vehículo registrado
-              con la placa:
-
-              <strong>
-                {{ placa }}
-              </strong>
-
-            </p>
-
-            <button
-              type="button"
-              class="btn ucad-boton-principal"
-              (click)="mostrarRegistroVehiculo()"
-            >
-              Registrar vehículo
-            </button>
-
-          </div>
-
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           RESUMEN DE COBRO
-           ===================================================== -->
-
-      <div
-        class="card tarjeta-cobro"
-        *ngIf="resumenEstacionamiento"
-      >
-
-        <div class="card-header tarjeta-cobro__encabezado">
-
-          <h5>
-            Resumen de estacionamiento
-          </h5>
-
-          <p>
-            Salida registrada correctamente.
-          </p>
-
-        </div>
-
-
-        <div class="card-body">
-
-
-          <!-- INFORMACIÓN -->
-
-          <div class="cobro-informacion">
-
-
-            <!-- PLACA -->
-
-            <div>
-
-              <span>Placa</span>
-
-              <strong>
-                {{ resumenEstacionamiento.placa }}
-              </strong>
-
-            </div>
-
-
-            <!-- PROPIETARIO -->
-
-            <div>
-
-              <span>Propietario</span>
-
-              <strong>
-                {{ resumenEstacionamiento.propietario }}
-              </strong>
-
-            </div>
-
-
-            <!-- TIPO DE USUARIO -->
-
-            <div>
-
-              <span>Tipo de usuario</span>
-
-              <strong>
-                {{ resumenEstacionamiento.tipoUsuario }}
-              </strong>
-
-            </div>
-
-
-            <!-- ENTRADA -->
-
-            <div>
-
-              <span>Entrada</span>
-
-              <strong>
-                {{ resumenEstacionamiento.horaEntrada }}
-              </strong>
-
-            </div>
-
-
-            <!-- SALIDA -->
-
-            <div>
-
-              <span>Salida</span>
-
-              <strong>
-                {{ resumenEstacionamiento.horaSalida }}
-              </strong>
-
-            </div>
-
-
-            <!-- TIEMPO -->
-
-            <div>
-
-              <span>Tiempo estacionado</span>
-
-              <strong>
-                {{ resumenEstacionamiento.tiempoEstacionado }}
-              </strong>
-
-            </div>
-
-
-          </div>
-
-
-          <!-- =================================================
-               INFORMACIÓN DEL COBRO
-               ================================================= -->
-
-          <div class="resultado-accion">
-
-            <p>
-              {{ obtenerMensajeCobro() }}
-            </p>
-
-          </div>
-
-
-          <!-- =================================================
-               TOTAL
-               ================================================= -->
-
-          <div class="cobro-total">
-
-            <span>
-              Total a pagar
-            </span>
-
-            <strong>
-              $
-              {{
-                resumenEstacionamiento.totalPagar
-                  | number:'1.2-2'
-              }}
-            </strong>
-
-          </div>
-
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================================
-           FORMULARIO DE REGISTRO DE VEHÍCULO
-           ===================================================== -->
-
-      <div
-        class="card tarjeta-registro"
-        *ngIf="mostrarFormulario"
-      >
-
-        <div class="card-header">
-
-          <h5>
-            Registrar nuevo vehículo
-          </h5>
-
-          <p>
-            Complete la información del vehículo.
-          </p>
-
-        </div>
-
-
-        <div class="card-body">
-
-          <form
-            #formularioVehiculo="ngForm"
-            (ngSubmit)="registrarVehiculo()"
-          >
-
-
-            <!-- =================================================
-                 PLACA Y TIPO DE USUARIO
-                 ================================================= -->
-
-            <div class="form-row">
-
-
-              <!-- PLACA -->
-
-              <div class="form-group col-md-6">
-
-                <label for="nuevaPlaca">
-                  Número de placa
-                </label>
-
-                <input
-                  type="text"
-                  id="nuevaPlaca"
-                  name="placa"
-                  class="form-control"
-                  [(ngModel)]="nuevoVehiculo.placa"
-                  readonly
-                >
-
-              </div>
-
-
-              <!-- TIPO DE USUARIO -->
-
-              <div class="form-group col-md-6">
-
-                <label for="tipoUsuario">
-                  Tipo de usuario
-                </label>
-
-                <select
-                  id="tipoUsuario"
-                  name="tipoUsuario"
-                  class="form-control"
-                  [(ngModel)]="nuevoVehiculo.tipoUsuario"
-                  required
-                >
-
-                  <option value="">
-                    Seleccione una opción
-                  </option>
-
-                  <option value="Estudiante">
-                    Estudiante
-                  </option>
-
-                  <option value="Docente">
-                    Docente
-                  </option>
-
-                  <option value="Empleado administrativo">
-                    Empleado administrativo
-                  </option>
-
-                  <option value="Vigilante">
-                    Vigilante
-                  </option>
-
-                  <option value="Invitado">
-                    Invitado
-                  </option>
-
-                </select>
-
-              </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 PROPIETARIO
-                 ================================================= -->
-
-            <div class="form-group">
-
-              <label for="propietario">
-                Nombre del propietario
-              </label>
-
-              <input
-                type="text"
-                id="propietario"
-                name="propietario"
-                class="form-control"
-                placeholder="Ingrese el nombre completo"
-                [(ngModel)]="nuevoVehiculo.propietario"
-                required
-              >
-
-            </div>
-
-
-            <!-- =================================================
-                 DATOS DEL VEHÍCULO
-                 ================================================= -->
-
-            <div class="form-row">
-
-
-              <!-- MARCA -->
-
-              <div class="form-group col-md-4">
-
-                <label for="marca">
-                  Marca
-                </label>
-
-                <input
-                  type="text"
-                  id="marca"
-                  name="marca"
-                  class="form-control"
-                  placeholder="Ej. Toyota"
-                  [(ngModel)]="nuevoVehiculo.marca"
-                  required
-                >
-
-              </div>
-
-
-              <!-- MODELO -->
-
-              <div class="form-group col-md-4">
-
-                <label for="modelo">
-                  Modelo
-                </label>
-
-                <input
-                  type="text"
-                  id="modelo"
-                  name="modelo"
-                  class="form-control"
-                  placeholder="Ej. Corolla"
-                  [(ngModel)]="nuevoVehiculo.modelo"
-                  required
-                >
-
-              </div>
-
-
-              <!-- COLOR -->
-
-              <div class="form-group col-md-4">
-
-                <label for="color">
-                  Color
-                </label>
-
-                <input
-                  type="text"
-                  id="color"
-                  name="color"
-                  class="form-control"
-                  placeholder="Ej. Blanco"
-                  [(ngModel)]="nuevoVehiculo.color"
-                  required
-                >
-
-              </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 BOTONES
-                 ================================================= -->
-
-            <div class="registro-acciones">
-
-              <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="cancelarRegistroVehiculo()"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="submit"
-                class="btn ucad-boton-principal"
-                [disabled]="formularioVehiculo.invalid"
-              >
-                Registrar vehículo
-              </button>
-
-            </div>
-
-
-          </form>
-
-        </div>
-
-      </div>
-
-
-    </main>
+    </button>
 
   </div>
 
-</app-sistema-layout>
+
+  <div class="estadisticas">
+
+    <div class="estadistica-card">
+
+      <div class="estadistica-icono azul">
+        <i class="bi bi-car-front"></i>
+      </div>
+
+      <div>
+        <span>Vehículos dentro</span>
+        <strong>{{ vehiculosDentro() }}</strong>
+      </div>
+
+    </div>
+
+
+    <div class="estadistica-card">
+
+      <div class="estadistica-icono verde">
+        <i class="bi bi-box-arrow-in-right"></i>
+      </div>
+
+      <div>
+        <span>Entradas de hoy</span>
+        <strong>{{ entradasHoy() }}</strong>
+      </div>
+
+    </div>
+
+
+    <div class="estadistica-card">
+
+      <div class="estadistica-icono naranja">
+        <i class="bi bi-box-arrow-right"></i>
+      </div>
+
+      <div>
+        <span>Salidas de hoy</span>
+        <strong>{{ salidasHoy() }}</strong>
+      </div>
+
+    </div>
+
+
+    <div class="estadistica-card">
+
+      <div class="estadistica-icono dinero">
+        <i class="bi bi-cash-stack"></i>
+      </div>
+
+      <div>
+        <span>Ingresos de hoy</span>
+        <strong>
+          ${{ ingresosHoy() | number:'1.2-2' }}
+        </strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <section class="inicio-card">
+
+    <div class="card-header">
+
+      <div>
+        <h2>Últimos movimientos</h2>
+        <p>Actividad reciente del estacionamiento.</p>
+      </div>
+
+    </div>
+
+
+    <div
+      *ngIf="cargando()"
+      class="estado-carga">
+
+      <i class="bi bi-hourglass-split"></i>
+
+      Cargando información...
+
+    </div>
+
+
+    <div
+      *ngIf="!cargando() && historial().length === 0"
+      class="estado-vacio">
+
+      <i class="bi bi-clock-history"></i>
+
+      <h3>No hay movimientos registrados</h3>
+
+      <p>
+        Las entradas y salidas aparecerán aquí.
+      </p>
+
+    </div>
+
+
+    <div
+      *ngIf="!cargando() && historial().length > 0"
+      class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Placa</th>
+            <th>Tipo de usuario</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Cobro</th>
+            <th>Estado</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let sesion of historial()">
+
+            <td>
+              <strong>
+                {{ sesion.placa }}
+              </strong>
+            </td>
+
+            <td>
+              {{ sesion.tipoUsuario }}
+            </td>
+
+            <td>
+              {{
+                sesion.fechaEntrada
+                  | date:'dd/MM/yyyy HH:mm'
+              }}
+            </td>
+
+            <td>
+
+              <span *ngIf="sesion.fechaSalida">
+                {{
+                  sesion.fechaSalida
+                    | date:'dd/MM/yyyy HH:mm'
+                }}
+              </span>
+
+              <span
+                *ngIf="!sesion.fechaSalida"
+                class="pendiente">
+                Pendiente
+              </span>
+
+            </td>
+
+            <td>
+              <strong>
+                ${{ sesion.monto | number:'1.2-2' }}
+              </strong>
+            </td>
+
+            <td>
+
+              <span
+                class="estado"
+                [ngClass]="
+                  sesion.estado === 'Abierta'
+                    ? 'estado-abierta'
+                    : 'estado-cerrada'
+                ">
+
+                <span class="punto"></span>
+
+                {{ sesion.estado }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

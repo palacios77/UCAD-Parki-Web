@@ -1,0 +1,282 @@
+.salida-pagina {
+  padding: 28px 30px;
+  box-sizing: border-box;
+}
+
+.salida-titulo {
+  margin-bottom: 24px;
+}
+
+.salida-titulo h1 {
+  margin: 0;
+  color: #073b6b;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.salida-titulo p {
+  margin: 6px 0 0;
+  color: #7b8794;
+  font-size: 13px;
+}
+
+.salida-card {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e1e7ed;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.salida-card-header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-bottom: 1px solid #e5e9ee;
+}
+
+.salida-icono {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #fbeaea;
+  color: #dc3545;
+  font-size: 18px;
+}
+
+.salida-card-header h2 {
+  margin: 0;
+  color: #27384a;
+  font-size: 16px;
+}
+
+.salida-card-header p {
+  margin: 4px 0 0;
+  color: #8a96a3;
+  font-size: 11px;
+}
+
+.salida-buscador {
+  padding: 22px;
+}
+
+.salida-buscador label {
+  display: block;
+  margin-bottom: 7px;
+  color: #425466;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.salida-campo {
+  display: flex;
+  gap: 10px;
+}
+
+.salida-campo input {
+  flex: 1;
+  height: 42px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid #d5dde5;
+  border-radius: 6px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.salida-campo input:focus {
+  border-color: #2878b8;
+  box-shadow: 0 0 0 2px rgba(40, 120, 184, 0.1);
+}
+
+.salida-campo input:disabled {
+  background-color: #f4f6f8;
+}
+
+.salida-campo button {
+  height: 42px;
+  min-width: 105px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: none;
+  border-radius: 6px;
+  background-color: #087bd1;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.salida-campo button:hover:not(:disabled) {
+  background-color: #076db9;
+}
+
+.salida-campo button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.salida-mensaje {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.mensaje-exito {
+  background-color: #e8f6ee;
+  color: #18733f;
+}
+
+.mensaje-error {
+  background-color: #fbeaea;
+  color: #a52d2d;
+}
+
+.card-titulo {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e9ee;
+}
+
+.card-titulo h2 {
+  margin: 0;
+  color: #27384a;
+  font-size: 16px;
+}
+
+.card-titulo p {
+  margin: 5px 0 0;
+  color: #8a96a3;
+  font-size: 11px;
+}
+
+.sesion-datos {
+  padding: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.sesion-datos span {
+  display: block;
+  margin-bottom: 5px;
+  color: #8995a2;
+  font-size: 11px;
+}
+
+.sesion-datos strong {
+  color: #354656;
+  font-size: 13px;
+}
+
+.estado-abierta {
+  color: #198754 !important;
+}
+
+.cobro-panel {
+  margin: 0 22px 22px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 7px;
+  background-color: #f4f7fa;
+  border: 1px solid #e1e7ed;
+}
+
+.cobro-info span {
+  display: block;
+  margin-bottom: 5px;
+  color: #7b8794;
+  font-size: 11px;
+}
+
+.cobro-info strong {
+  color: #073b6b;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.cobro-panel p {
+  margin: 0;
+  color: #7b8794;
+  font-size: 11px;
+  text-align: right;
+}
+
+.salida-accion {
+  padding: 0 22px 22px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-salida {
+  height: 40px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: none;
+  border-radius: 6px;
+  background-color: #dc3545;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-salida:hover:not(:disabled) {
+  background-color: #bb2d3b;
+}
+
+.btn-salida:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+
+  .salida-campo {
+    flex-direction: column;
+  }
+
+  .salida-campo button {
+    width: 100%;
+  }
+
+  .sesion-datos {
+    grid-template-columns: 1fr;
+  }
+
+  .cobro-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cobro-panel p {
+    text-align: left;
+  }
+
+  .salida-accion {
+    justify-content: stretch;
+  }
+
+  .btn-salida {
+    width: 100%;
+  }
+}

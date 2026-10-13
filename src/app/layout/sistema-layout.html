@@ -1,68 +1,158 @@
 <div class="sistema">
 
-  <!-- ENCABEZADO INSTITUCIONAL -->
-  <header class="ucad-encabezado sistema-encabezado">
+  <aside class="sistema-sidebar">
 
-    <div class="sistema-marca">
+    <div class="sidebar-marca">
 
       <img
         src="/logo.jpeg"
-        alt="Logo Universidad Cristiana de las Asambleas de Dios">
+        alt="Logo UCAD Parki">
 
       <div>
-
-        <h1>
-          UCAD Parki
-        </h1>
-
-        <p>
-          Sistema de Gestión y Control de Estacionamiento
-        </p>
-
+        <h2>UCAD Parki</h2>
+        <span>{{ rolUsuario }}</span>
       </div>
 
     </div>
 
 
-    <!-- INFORMACIÓN DEL USUARIO LOGUEADO -->
-    <div class="sistema-usuario">
+    <nav class="sidebar-menu">
 
-      <div class="usuario-informacion">
+      <a
+        routerLink="/dashboard/vigilante"
+        routerLinkActive="activo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="menu-item">
 
-        <strong>
-          {{ nombreUsuario }}
-        </strong>
+        <i class="bi bi-house-fill"></i>
 
         <span>
-          {{ correoUsuario }}
+          Inicio
         </span>
 
-        <span class="usuario-rol">
-          {{ rolUsuario }}
+      </a>
+
+
+      <a
+        routerLink="/dashboard/vigilante/entrada"
+        routerLinkActive="activo"
+        class="menu-item">
+
+        <i class="bi bi-box-arrow-in-right"></i>
+
+        <span>
+          Entrada
         </span>
+
+      </a>
+
+
+      <a
+        routerLink="/dashboard/vigilante/salida"
+        routerLinkActive="activo"
+        class="menu-item">
+
+        <i class="bi bi-box-arrow-right"></i>
+
+        <span>
+          Salida
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/dashboard/vigilante/vehiculos"
+        routerLinkActive="activo"
+        class="menu-item">
+
+        <i class="bi bi-car-front-fill"></i>
+
+        <span>
+          Vehículos
+        </span>
+
+      </a>
+
+
+      <a
+        routerLink="/dashboard/vigilante/historial"
+        routerLinkActive="activo"
+        class="menu-item">
+
+        <i class="bi bi-clock-history"></i>
+
+        <span>
+          Historial
+        </span>
+
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <section class="sistema-principal">
+
+    <header class="sistema-barra">
+
+      <div class="barra-derecha">
+
+        <button
+          type="button"
+          class="boton-notificacion">
+
+          <i class="bi bi-bell"></i>
+
+          <span></span>
+
+        </button>
+
+
+        <div class="usuario-barra">
+
+          <div class="usuario-avatar">
+            {{ nombreUsuario.charAt(0).toUpperCase() }}
+          </div>
+
+          <div class="usuario-datos">
+
+            <strong>
+              {{ nombreUsuario }}
+            </strong>
+
+            <small>
+              {{ rolUsuario }}
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="boton-salir"
+          (click)="cerrarSesion()">
+
+          <i class="bi bi-box-arrow-right"></i>
+
+          Salir
+
+        </button>
 
       </div>
 
-
-      <button
-        type="button"
-        class="btn btn-outline-light btn-sm"
-        (click)="cerrarSesion()">
-
-        Cerrar sesión
-
-      </button>
-
-    </div>
-
-  </header>
+    </header>
 
 
-  <!-- CONTENIDO DEL DASHBOARD -->
-  <main class="sistema-contenido">
+    <main class="sistema-contenido">
 
-    <ng-content></ng-content>
+      <router-outlet></router-outlet>
 
-  </main>
+    </main>
+
+  </section>
 
 </div>

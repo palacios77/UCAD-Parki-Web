@@ -1,32 +1,24 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-
-import { Router } from '@angular/router';
-
-import {
-  onAuthStateChanged,
-  signOut
-} from 'firebase/auth';
-
-import {
-  doc,
-  getDoc
-} from 'firebase/firestore';
-
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase.config';
-
 
 @Component({
   selector: 'app-sistema-layout',
-  imports: [],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet
+  ],
   templateUrl: './sistema-layout.html',
   styleUrl: './sistema-layout.css'
 })
 export class SistemaLayout implements OnInit {
 
-  nombreUsuario: string = '';
+  nombreUsuario: string = 'Usuario';
   correoUsuario: string = '';
   rolUsuario: string = '';
 
@@ -34,176 +26,58 @@ export class SistemaLayout implements OnInit {
     private router: Router
   ) {}
 
-
   ngOnInit(): void {
 
-    /*
-     * PRIMERO:
-     * Leer inmediatamente la información guardada
-     * durante el login.
-     */
-    const usuarioGuardado =
-      sessionStorage.getItem(
-        'usuarioLogueado'
-      );
+    onAuthStateChanged(auth, async (usuario) => {
 
+      if (!usuario) {
+        this.router.navigate(['/login']);
+        return;
+      }
 
-    if (usuarioGuardado) {
+      this.correoUsuario =
+        usuario.email || '';
 
       try {
 
-        const usuario =
-          JSON.parse(usuarioGuardado);
+        const usuarioRef =
+          doc(db, 'usuarios', usuario.uid);
 
+        const usuarioDoc =
+          await getDoc(usuarioRef);
 
-        this.nombreUsuario =
-          usuario.nombre ?? '';
+        if (usuarioDoc.exists()) {
 
-        this.correoUsuario =
-          usuario.correo ?? '';
+          const datos =
+            usuarioDoc.data();
 
-        this.rolUsuario =
-          usuario.rol ?? '';
+          this.nombreUsuario =
+            datos['nombre'] || 'Usuario';
 
+          this.rolUsuario =
+            datos['rol'] || '';
+
+        }
 
       } catch (error) {
 
         console.error(
-          'Error al leer usuario de sesión:',
+          'Error al obtener usuario:',
           error
         );
 
       }
 
-    }
-
-
-    /*
-     * SEGUNDO:
-     * Firebase mantiene la autenticación real.
-     */
-    onAuthStateChanged(
-      auth,
-      async (usuario) => {
-
-        if (!usuario) {
-
-          this.nombreUsuario = '';
-          this.correoUsuario = '';
-          this.rolUsuario = '';
-
-          sessionStorage.removeItem(
-            'usuarioLogueado'
-          );
-
-          return;
-        }
-
-
-        /*
-         * Si Firebase tiene usuario autenticado,
-         * actualizamos la información desde Firestore.
-         */
-        try {
-
-          const referenciaUsuario =
-            doc(
-              db,
-              'usuarios',
-              usuario.uid
-            );
-
-
-          const documentoUsuario =
-            await getDoc(
-              referenciaUsuario
-            );
-
-
-          if (documentoUsuario.exists()) {
-
-            const datos =
-              documentoUsuario.data();
-
-
-            this.nombreUsuario =
-              datos['nombre'] ?? '';
-
-
-            this.correoUsuario =
-              datos['correo'] ??
-              usuario.email ??
-              '';
-
-
-            this.rolUsuario =
-              datos['rol'] ?? '';
-
-
-            /*
-             * Actualizamos también la sesión.
-             */
-            sessionStorage.setItem(
-              'usuarioLogueado',
-              JSON.stringify({
-                uid: usuario.uid,
-                nombre: this.nombreUsuario,
-                correo: this.correoUsuario,
-                rol: this.rolUsuario
-              })
-            );
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            'Error al actualizar información del usuario:',
-            error
-          );
-
-        }
-
-      }
-    );
+    });
 
   }
-
 
   async cerrarSesion(): Promise<void> {
 
-    try {
+    await signOut(auth);
 
-      /*
-       * Cerrar sesión real en Firebase.
-       */
-      await signOut(auth);
+    sessionStorage.clear();
 
-
-      /*
-       * Eliminar información visual de la sesión.
-       */
-      sessionStorage.removeItem(
-        'usuarioLogueado'
-      );
-
-
-      /*
-       * Regresar al login.
-       */
-      await this.router.navigate([
-        '/login'
-      ]);
-
-    } catch (error) {
-
-      console.error(
-        'Error al cerrar sesión:',
-        error
-      );
-
-    }
-
+    this.router.navigate(['/login']);
   }
-
 }

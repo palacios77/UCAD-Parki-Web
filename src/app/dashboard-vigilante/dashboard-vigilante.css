@@ -1,399 +1,240 @@
-.vigilante-pagina {
-  min-height: 100vh;
-  background-color: #f4f6f9;
+.inicio-pagina {
+  padding: 32px;
 }
 
-
-/* =====================================================
-   ENCABEZADO
-   ===================================================== */
-
-.vigilante-encabezado {
+.inicio-titulo {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-
-  padding: 20px 30px;
-
-  background-color: #073b6b;
-  color: #ffffff;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.vigilante-encabezado h1 {
+.inicio-titulo h1 {
   margin: 0;
-
-  font-size: 24px;
-  font-weight: 600;
+  color: #073f73;
+  font-size: 28px;
 }
 
-.vigilante-encabezado p {
-  margin: 4px 0 0;
-
-  font-size: 14px;
-  opacity: 0.85;
+.inicio-titulo p {
+  margin: 6px 0 0;
+  color: #718096;
 }
 
-.vigilante-usuario {
+.btn-actualizar {
+  border: 1px solid #d8e0e8;
+  background: white;
+  color: #536273;
+  border-radius: 5px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.btn-actualizar:hover {
+  background: #f5f7fa;
+}
+
+.estadisticas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.estadistica-card {
+  background: white;
+  border: 1px solid #e1e7ef;
+  border-radius: 8px;
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-
-/* =====================================================
-   CONTENIDO
-   ===================================================== */
-
-.vigilante-contenido {
-  padding: 30px;
+.estadistica-icono {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
 }
 
-
-/* =====================================================
-   TARJETAS
-   ===================================================== */
-
-.tarjeta-busqueda,
-.tarjeta-resultado,
-.tarjeta-registro,
-.tarjeta-cobro {
-  max-width: 850px;
-
-  margin: 0 auto 25px;
-
-  border: none;
-
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.08);
+.estadistica-icono.azul {
+  background: #e5f0fa;
+  color: #087fd1;
 }
 
+.estadistica-icono.verde {
+  background: #e5f7ec;
+  color: #218838;
+}
 
-/* =====================================================
-   ENCABEZADO DE TARJETAS
-   ===================================================== */
+.estadistica-icono.naranja {
+  background: #fff1df;
+  color: #d98200;
+}
+
+.estadistica-icono.dinero {
+  background: #e9e7fa;
+  color: #5d50b5;
+}
+
+.estadistica-card span {
+  display: block;
+  color: #718096;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.estadistica-card strong {
+  display: block;
+  color: #123f6b;
+  font-size: 24px;
+}
+
+.inicio-card {
+  background: white;
+  border: 1px solid #e1e7ef;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
 
 .card-header {
-  background-color: #ffffff;
-
-  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 22px;
+  border-bottom: 1px solid #e5eaf0;
 }
 
-.card-header h5 {
+.card-header h2 {
   margin: 0;
-
-  color: #073b6b;
-
-  font-size: 18px;
-  font-weight: 600;
+  color: #123f6b;
+  font-size: 19px;
 }
 
 .card-header p {
   margin: 5px 0 0;
-
-  color: #777777;
-
+  color: #7b8794;
   font-size: 13px;
 }
 
-
-/* =====================================================
-   INFORMACIÓN DEL VEHÍCULO
-   ===================================================== */
-
-.vehiculo-informacion {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 20px;
-
-  margin-bottom: 25px;
+.tabla-contenedor {
+  overflow-x: auto;
 }
 
-.vehiculo-informacion div {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 5px;
-}
-
-.vehiculo-informacion span:first-child {
-  color: #777777;
-
-  font-size: 13px;
-}
-
-.vehiculo-informacion strong {
-  color: #073b6b;
-
-  font-size: 15px;
-}
-
-
-/* =====================================================
-   ESTADO
-   ===================================================== */
-
-.badge {
-  width: fit-content;
-
-  padding: 6px 10px;
-
-  font-size: 12px;
-}
-
-.badge-success {
-  background-color: #28a745;
-}
-
-.badge-warning {
-  background-color: #f5b800;
-
-  color: #ffffff;
-}
-
-
-/* =====================================================
-   ACCIONES
-   ===================================================== */
-
-.resultado-accion {
-  padding-top: 20px;
-
-  border-top: 1px solid #e5e5e5;
-}
-
-.resultado-accion p {
-  color: #555555;
-}
-
-
-/* =====================================================
-   VEHÍCULO NO ENCONTRADO
-   ===================================================== */
-
-.vehiculo-no-encontrado {
-  padding: 20px;
-
-  text-align: center;
-
-  border: 1px dashed #cccccc;
-
-  border-radius: 6px;
-
-  background-color: #fafafa;
-}
-
-.vehiculo-no-encontrado p {
-  margin-bottom: 20px;
-
-  color: #555555;
-}
-
-
-/* =====================================================
-   REGISTRO DE VEHÍCULO
-   ===================================================== */
-
-.tarjeta-registro {
-  margin-bottom: 25px;
-}
-
-.tarjeta-registro .form-group {
-  margin-bottom: 20px;
-}
-
-.tarjeta-registro label {
-  color: #073b6b;
-
-  font-size: 14px;
-
-  font-weight: 600;
-}
-
-.tarjeta-registro .form-control {
-  height: 40px;
-
-  border: 1px solid #d5dce3;
-
-  border-radius: 5px;
-}
-
-.tarjeta-registro .form-control:focus {
-  border-color: #2878b8;
-
-  box-shadow:
-    0 0 0 2px rgba(40, 120, 184, 0.1);
-}
-
-.registro-acciones {
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 10px;
-
-  padding-top: 10px;
-
-  border-top: 1px solid #e5e5e5;
-}
-
-
-/* =====================================================
-   RESUMEN DE COBRO
-   ===================================================== */
-
-.tarjeta-cobro {
+table {
   width: 100%;
-
-  max-width: 850px;
-
-  margin: 25px auto 0;
-
-  border-top: 4px solid var(--ucad-dorado);
-
-  overflow: hidden;
+  border-collapse: collapse;
 }
 
-
-/* ENCABEZADO DEL COBRO */
-
-.tarjeta-cobro__encabezado {
-  background-color: var(--ucad-azul);
-
-  color: var(--ucad-blanco);
+thead {
+  background: #f6f8fb;
 }
 
-.tarjeta-cobro__encabezado h5 {
-  margin-bottom: 5px;
-
-  color: var(--ucad-blanco);
+th,
+td {
+  padding: 15px 18px;
+  text-align: left;
+  border-bottom: 1px solid #edf0f4;
+  font-size: 14px;
 }
 
-.tarjeta-cobro__encabezado p {
-  margin: 0;
-
-  color: var(--ucad-blanco);
-
-  font-size: 13px;
-
-  opacity: 0.85;
-}
-
-
-/* INFORMACIÓN DEL COBRO */
-
-.cobro-informacion {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 20px;
-}
-
-.cobro-informacion div {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 5px;
-}
-
-.cobro-informacion span {
-  color: #666666;
-
-  font-size: 13px;
-}
-
-.cobro-informacion strong {
-  color: var(--ucad-azul);
-
-  font-size: 15px;
-}
-
-
-/* TOTAL A PAGAR */
-
-.cobro-total {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  margin-top: 25px;
-
-  padding-top: 20px;
-
-  border-top: 1px solid #e5e5e5;
-}
-
-.cobro-total span {
-  color: var(--ucad-azul);
-
-  font-size: 18px;
-
+th {
+  color: #536273;
   font-weight: 600;
 }
 
-.cobro-total strong {
-  color: var(--ucad-azul);
-
-  font-size: 28px;
-
-  font-weight: 700;
+td {
+  color: #465568;
 }
 
+td strong {
+  color: #123f6b;
+}
 
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
 
-@media (max-width: 768px) {
+.punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
 
-  .vigilante-encabezado {
-    flex-direction: column;
+.estado-abierta {
+  background: #fff4db;
+  color: #9a6700;
+}
 
+.estado-abierta .punto {
+  background: #e0a800;
+}
+
+.estado-cerrada {
+  background: #e5f7ec;
+  color: #19733c;
+}
+
+.estado-cerrada .punto {
+  background: #28a745;
+}
+
+.pendiente {
+  color: #9a6700;
+}
+
+.estado-carga,
+.estado-vacio {
+  padding: 55px 20px;
+  text-align: center;
+  color: #718096;
+}
+
+.estado-vacio i {
+  font-size: 36px;
+  color: #9aa8b7;
+}
+
+.estado-vacio h3 {
+  color: #465568;
+  margin: 12px 0 6px;
+}
+
+.estado-vacio p {
+  margin: 0;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .estadisticas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .inicio-pagina {
+    padding: 20px;
+  }
+
+  .inicio-titulo {
     align-items: flex-start;
-
+    flex-direction: column;
     gap: 15px;
   }
 
-  .vigilante-usuario {
-    width: 100%;
-
-    justify-content: space-between;
-  }
-
-  .vigilante-contenido {
-    padding: 20px 15px;
-  }
-
-  .vehiculo-informacion {
+  .estadisticas {
     grid-template-columns: 1fr;
   }
-
-  .cobro-informacion {
-    grid-template-columns: 1fr;
-  }
-
-  .cobro-total {
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 8px;
-  }
-
-  .registro-acciones {
-    flex-direction: column;
-  }
-
-  .registro-acciones .btn {
-    width: 100%;
-  }
-
 }
