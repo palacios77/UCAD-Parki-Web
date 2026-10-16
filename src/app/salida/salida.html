@@ -102,7 +102,7 @@
 
 
   <section
-    *ngIf="sesionEncontrada()"
+    *ngIf="sesionEncontrada() as sesion"
     class="salida-card sesion-card">
 
     <div class="card-titulo">
@@ -127,7 +127,7 @@
         </span>
 
         <strong>
-          {{ sesionEncontrada().placa }}
+          {{ sesion.placa }}
         </strong>
 
       </div>
@@ -140,7 +140,7 @@
         </span>
 
         <strong>
-          {{ sesionEncontrada().tipoUsuario }}
+          {{ sesion.tipoUsuario }}
         </strong>
 
       </div>
@@ -154,7 +154,7 @@
 
         <strong>
           {{
-            sesionEncontrada().fechaEntrada.toDate()
+            sesion.fechaEntrada.toDate()
               | date:'dd/MM/yyyy HH:mm'
           }}
         </strong>
@@ -169,7 +169,7 @@
         </span>
 
         <strong class="estado-abierta">
-          {{ sesionEncontrada().estado }}
+          {{ sesion.estado }}
         </strong>
 
       </div>

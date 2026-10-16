@@ -1,4 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
+
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,6 +8,7 @@ import { Vehiculo } from '../modelos/vehiculo.model';
 
 @Component({
   selector: 'app-vehiculos',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule
@@ -14,7 +16,7 @@ import { Vehiculo } from '../modelos/vehiculo.model';
   templateUrl: './vehiculos.html',
   styleUrl: './vehiculos.css'
 })
-export class Vehiculos implements OnInit {
+export class Vehiculos implements OnInit, OnDestroy {
   vehiculos = signal<Vehiculo[]>([]);
 
   mostrarFormulario = signal(false);
@@ -22,6 +24,8 @@ export class Vehiculos implements OnInit {
   guardando = signal(false);
   mensaje = signal('');
   tipoMensaje = signal('');
+
+  private intervaloActualizacion?: ReturnType<typeof setInterval>;
 
   nuevoVehiculo: Vehiculo = {
     placa: '',
@@ -39,33 +43,50 @@ export class Vehiculos implements OnInit {
 
   ngOnInit(): void {
     this.cargarVehiculos();
+
+    // Actualiza los estados mientras la pantalla está abierta.
+    this.intervaloActualizacion = setInterval(() => {
+      if (!this.cargando() && !this.guardando()) {
+        this.cargarVehiculos(true);
+      }
+    }, 10000);
   }
 
-  async cargarVehiculos(): Promise<void> {
+  ngOnDestroy(): void {
+    if (this.intervaloActualizacion) {
+      clearInterval(this.intervaloActualizacion);
+    }
+  }
+
+  async cargarVehiculos(silencioso = false): Promise<void> {
+    if (this.cargando()) {
+      return;
+    }
+
     this.cargando.set(true);
-    this.mensaje.set('');
+
+    if (!silencioso) {
+      this.mensaje.set('');
+    }
 
     try {
-      const vehiculos =
-        await this.parqueoService.listarVehiculos();
+      const lista = await this.parqueoService.listarVehiculos();
 
-      vehiculos.sort((a, b) =>
+      lista.sort((a, b) =>
         a.placa.localeCompare(b.placa)
       );
 
-      this.vehiculos.set(vehiculos);
+      this.vehiculos.set(lista);
 
     } catch (error) {
-      console.error(
-        'Error al cargar vehículos:',
-        error
-      );
+      console.error('Error al cargar vehículos:', error);
 
-      this.mensaje.set(
-        'No fue posible cargar los vehículos.'
-      );
-
-      this.tipoMensaje.set('error');
+      if (!silencioso) {
+        this.mensaje.set(
+          'No fue posible cargar los vehículos.'
+        );
+        this.tipoMensaje.set('error');
+      }
 
     } finally {
       this.cargando.set(false);
@@ -97,40 +118,23 @@ export class Vehiculos implements OnInit {
       return;
     }
 
-    const placa =
-      this.nuevoVehiculo.placa
-        .trim()
-        .toUpperCase();
-
-    const propietario =
-      this.nuevoVehiculo.propietario.trim();
-
-    const tipoUsuario =
-      this.nuevoVehiculo.tipoUsuario;
-
-    const marca =
-      this.nuevoVehiculo.marca.trim();
-
-    const modelo =
-      this.nuevoVehiculo.modelo.trim();
-
-    const color =
-      this.nuevoVehiculo.color.trim();
+    const placa = this.nuevoVehiculo.placa.trim().toUpperCase();
+    const propietario = this.nuevoVehiculo.propietario.trim();
+    const tipoUsuario = this.nuevoVehiculo.tipoUsuario;
+    const marca = this.nuevoVehiculo.marca.trim();
+    const modelo = this.nuevoVehiculo.modelo.trim();
+    const color = this.nuevoVehiculo.color.trim();
 
     if (
-      placa === '' ||
-      propietario === '' ||
-      tipoUsuario === '' ||
-      marca === '' ||
-      modelo === '' ||
-      color === ''
+      !placa ||
+      !propietario ||
+      !tipoUsuario ||
+      !marca ||
+      !modelo ||
+      !color
     ) {
-      this.mensaje.set(
-        'Complete todos los campos.'
-      );
-
+      this.mensaje.set('Complete todos los campos.');
       this.tipoMensaje.set('error');
-
       return;
     }
 
@@ -138,17 +142,12 @@ export class Vehiculos implements OnInit {
     this.mensaje.set('');
 
     try {
-      const vehiculoExistente =
-        await this.parqueoService
-          .buscarVehiculo(placa);
+      const existente =
+        await this.parqueoService.buscarVehiculo(placa);
 
-      if (vehiculoExistente) {
-        this.mensaje.set(
-          'El vehículo ya está registrado.'
-        );
-
+      if (existente) {
+        this.mensaje.set('El vehículo ya está registrado.');
         this.tipoMensaje.set('error');
-
         return;
       }
 
@@ -162,26 +161,18 @@ export class Vehiculos implements OnInit {
         dentro: false
       });
 
-      this.mensaje.set(
-        'Vehículo registrado correctamente.'
-      );
-
+      this.mensaje.set('Vehículo registrado correctamente.');
       this.tipoMensaje.set('exito');
-
       this.mostrarFormulario.set(false);
 
       await this.cargarVehiculos();
 
     } catch (error) {
-      console.error(
-        'Error al registrar vehículo:',
-        error
-      );
+      console.error('Error al registrar vehículo:', error);
 
       this.mensaje.set(
-        'No fue posible registrar el vehículo.'
+        'No fue posible registrar el vehículo. Verifique sus permisos.'
       );
-
       this.tipoMensaje.set('error');
 
     } finally {

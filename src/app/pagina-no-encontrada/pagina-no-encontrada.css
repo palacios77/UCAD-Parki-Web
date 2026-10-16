@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.no-encontrada-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f4f7fb;
+}
+
+.no-encontrada-tarjeta {
+  width: 100%;
+  max-width: 520px;
+  padding: 42px 32px;
+  background: #fff;
+  border: 1px solid #e1e7ef;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.codigo-error {
+  color: #087fd1;
+  font-size: 76px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.no-encontrada-tarjeta h1 {
+  margin: 0 0 14px;
+  color: #073f73;
+  font-size: 26px;
+}
+
+.no-encontrada-tarjeta p {
+  margin: 0 0 28px;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.btn-inicio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 18px;
+  border-radius: 5px;
+  background: #087fd1;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-inicio:hover {
+  background: #066db5;
+}

@@ -5,6 +5,7 @@ import {
   doc,
   getDocs,
   query,
+  runTransaction,
   Timestamp,
   updateDoc,
   where
@@ -282,12 +283,29 @@ export class ParqueoService {
 
   async registrarEntrada(
     vehiculo: Vehiculo
-  ): Promise<void> {
+  ): Promise<'registrada' | 'sesion-abierta-existente'> {
 
     if (!vehiculo.id) {
       throw new Error(
         'El vehículo no tiene un identificador.'
       );
+    }
+
+    const consultaSesionesAbiertas =
+      query(
+        this.sesionesRef,
+        where('vehiculoId', '==', vehiculo.id)
+      );
+
+    const sesionesEncontradas =
+      await getDocs(consultaSesionesAbiertas);
+
+    for (const documento of sesionesEncontradas.docs) {
+      const datos = documento.data();
+
+      if (datos['estado'] === 'Abierta') {
+        return 'sesion-abierta-existente';
+      }
     }
 
     const ahora =
@@ -339,6 +357,8 @@ export class ParqueoService {
           usuario?.email || ''
       }
     );
+
+    return 'registrada';
   }
 
 
@@ -439,13 +459,6 @@ export class ParqueoService {
     const fechaSalida =
       Timestamp.now();
 
-    const monto =
-      this.calcularCobro(
-        sesion.tipoUsuario,
-        sesion.fechaEntrada,
-        fechaSalida
-      );
-
     const sesionRef =
       doc(
         db,
@@ -453,33 +466,95 @@ export class ParqueoService {
         sesion.id
       );
 
-    await updateDoc(
-      sesionRef,
-      {
-        fechaSalida:
-          fechaSalida,
-
-        monto:
-          monto,
-
-        estado:
-          'Cerrada'
-      }
-    );
-
-    const vehiculoRef =
-      doc(
+    const monto =
+      await runTransaction(
         db,
-        'vehiculos',
-        sesion.vehiculoId
-      );
+        async (transaccion) => {
+          const documentoSesion =
+            await transaccion.get(sesionRef);
 
-    await updateDoc(
-      vehiculoRef,
-      {
-        dentro: false
-      }
-    );
+          if (!documentoSesion.exists()) {
+            throw new Error(
+              'La sesión no existe.'
+            );
+          }
+
+          const datosSesion =
+            documentoSesion.data();
+
+          if (datosSesion['estado'] !== 'Abierta') {
+            throw new Error(
+              'La sesión ya no está abierta.'
+            );
+          }
+
+          const vehiculoId =
+            datosSesion['vehiculoId'];
+          const tipoUsuario =
+            datosSesion['tipoUsuario'];
+          const fechaEntrada =
+            datosSesion['fechaEntrada'];
+
+          if (
+            typeof vehiculoId !== 'string' ||
+            vehiculoId !== sesion.vehiculoId
+          ) {
+            throw new Error(
+              'El vehículo asociado a la sesión no coincide.'
+            );
+          }
+
+          if (
+            typeof tipoUsuario !== 'string' ||
+            !(fechaEntrada instanceof Timestamp)
+          ) {
+            throw new Error(
+              'La sesión no contiene los datos necesarios para calcular el cobro.'
+            );
+          }
+
+          const vehiculoRef =
+            doc(
+              db,
+              'vehiculos',
+              vehiculoId
+            );
+
+          const documentoVehiculo =
+            await transaccion.get(vehiculoRef);
+
+          if (!documentoVehiculo.exists()) {
+            throw new Error(
+              'El vehículo asociado a la sesión no existe.'
+            );
+          }
+
+          const montoCalculado =
+            this.calcularCobro(
+              tipoUsuario,
+              fechaEntrada,
+              fechaSalida
+            );
+
+          transaccion.update(
+            sesionRef,
+            {
+              fechaSalida,
+              monto: montoCalculado,
+              estado: 'Cerrada'
+            }
+          );
+
+          transaccion.update(
+            vehiculoRef,
+            {
+              dentro: false
+            }
+          );
+
+          return montoCalculado;
+        }
+      );
 
     return monto;
   }

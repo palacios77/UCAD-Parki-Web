@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.error-pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f4f7fb;
+}
+
+.error-tarjeta {
+  width: 100%;
+  max-width: 520px;
+  padding: 42px 32px;
+  background: #fff;
+  border: 1px solid #e1e7ef;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.error-icono {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e5f0fa;
+  color: #087fd1;
+  font-size: 34px;
+}
+
+.error-tarjeta h1 {
+  margin: 0 0 14px;
+  color: #073f73;
+  font-size: 26px;
+}
+
+.error-tarjeta p {
+  color: #465568;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.error-tarjeta .error-ayuda {
+  margin: 12px 0 26px;
+  color: #718096;
+  font-size: 13px;
+}
+
+.btn-reintentar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 5px;
+  background: #087fd1;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-reintentar:hover {
+  background: #066db5;
+}
+
+.error-tarjeta a {
+  display: inline-block;
+  margin-top: 20px;
+  color: #536273;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.error-tarjeta a:hover {
+  color: #087fd1;
+  text-decoration: underline;
+}

@@ -1,0 +1,89 @@
+<div class="admin-layout">
+
+  <aside class="admin-sidebar" [class.menu-abierto]="menuAbierto">
+
+    <div class="admin-logo">
+      <div class="logo-icono">UCAD</div>
+      <div>
+        <strong>UCAD Parki</strong>
+        <span>Administrador</span>
+      </div>
+    </div>
+
+    <nav class="admin-menu">
+
+      <a routerLink="/dashboard/administrador"
+         routerLinkActive="activo"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="cerrarMenu()">
+        <i class="bi bi-house-door"></i>
+        <span>Inicio</span>
+      </a>
+
+      <a routerLink="/dashboard/administrador/vehiculos"
+         routerLinkActive="activo"
+         (click)="cerrarMenu()">
+        <i class="bi bi-car-front"></i>
+        <span>Vehículos</span>
+      </a>
+
+      <a routerLink="/dashboard/administrador/usuarios"
+         routerLinkActive="activo"
+         (click)="cerrarMenu()">
+        <i class="bi bi-people"></i>
+        <span>Usuarios</span>
+      </a>
+
+      <a routerLink="/dashboard/administrador/historial"
+         routerLinkActive="activo"
+         (click)="cerrarMenu()">
+        <i class="bi bi-clock-history"></i>
+        <span>Historial</span>
+      </a>
+
+      <a routerLink="/dashboard/administrador/reportes"
+         routerLinkActive="activo"
+         (click)="cerrarMenu()">
+        <i class="bi bi-bar-chart"></i>
+        <span>Reportes</span>
+      </a>
+
+      <a routerLink="/dashboard/administrador/configuracion"
+         routerLinkActive="activo"
+         (click)="cerrarMenu()">
+        <i class="bi bi-gear"></i>
+        <span>Configuración</span>
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <div class="admin-contenido">
+
+    <header class="admin-header">
+      <button
+        type="button"
+        class="btn-menu"
+        aria-label="Abrir menú"
+        (click)="menuAbierto = !menuAbierto">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <div class="admin-usuario">
+        <div class="avatar">A</div>
+        <div>
+          <strong>Administrador UCAD</strong>
+          <span>Administrador</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-main" (click)="cerrarMenu()">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>
+

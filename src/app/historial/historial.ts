@@ -13,7 +13,9 @@ import { ParqueoService } from '../servicios/parqueo.service';
   styleUrl: './historial.css'
 })
 export class Historial implements OnInit {
-  historial = signal<any[]>([]);
+  historial = signal<
+    Awaited<ReturnType<ParqueoService['listarHistorial']>>
+  >([]);
   cargando = signal(false);
 
   constructor(

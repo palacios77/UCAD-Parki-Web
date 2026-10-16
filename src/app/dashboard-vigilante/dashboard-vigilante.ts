@@ -17,7 +17,9 @@ export class DashboardVigilante implements OnInit {
   entradasHoy = signal(0);
   salidasHoy = signal(0);
   ingresosHoy = signal(0);
-  historial = signal<any[]>([]);
+  historial = signal<
+    Awaited<ReturnType<ParqueoService['listarHistorial']>>
+  >([]);
   cargando = signal(false);
 
   constructor(

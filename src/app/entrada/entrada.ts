@@ -215,10 +215,20 @@ export class Entrada {
 
     try {
 
-      await this.parqueoService
-        .registrarEntrada(
-          this.vehiculoEncontrado
-        );
+      const resultado =
+        await this.parqueoService
+          .registrarEntrada(
+            this.vehiculoEncontrado
+          );
+
+      if (resultado === 'sesion-abierta-existente') {
+        this.mensaje =
+          'Ya existe una entrada abierta para este vehículo.';
+
+        this.tipoMensaje = 'error';
+
+        return;
+      }
 
       this.vehiculoEncontrado.dentro = true;
 

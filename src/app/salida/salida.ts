@@ -19,7 +19,9 @@ export class Salida {
   placa: string = '';
   mensaje = signal('');
   tipoMensaje = signal('');
-  sesionEncontrada = signal<any | null>(null);
+  sesionEncontrada = signal<
+    Awaited<ReturnType<ParqueoService['buscarSesionAbierta']>>
+  >(null);
   buscando = signal(false);
   procesandoSalida = signal(false);
   montoCalculado = signal(0);

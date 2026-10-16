@@ -1,10 +1,13 @@
+
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import {
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence
 } from 'firebase/auth';
 
 import {
@@ -16,6 +19,7 @@ import { auth, db } from '../firebase.config';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     FormsModule,
     CommonModule
@@ -27,27 +31,19 @@ export class Login {
 
   correo: string = '';
   contrasena: string = '';
-
   mostrarContrasena: boolean = false;
-
   mensaje: string = '';
   tipoMensaje: string = '';
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   async iniciarSesion(): Promise<void> {
-
     if (
       this.correo.trim() === '' ||
       this.contrasena.trim() === ''
     ) {
-      this.mensaje =
-        'Ingrese su correo y contraseña.';
-
+      this.mensaje = 'Ingrese su correo y contraseña.';
       this.tipoMensaje = 'danger';
-
       return;
     }
 
@@ -55,118 +51,68 @@ export class Login {
     this.tipoMensaje = '';
 
     try {
+      // Mantener la sesión de Firebase después de recargar.
+      await setPersistence(auth, browserLocalPersistence);
 
-      const credencial =
-        await signInWithEmailAndPassword(
-          auth,
-          this.correo.trim(),
-          this.contrasena
-        );
+      const credencial = await signInWithEmailAndPassword(
+        auth,
+        this.correo.trim(),
+        this.contrasena
+      );
 
-      const uid =
-        credencial.user.uid;
-
-      const referenciaUsuario =
-        doc(
-          db,
-          'usuarios',
-          uid
-        );
-
-      const documentoUsuario =
-        await getDoc(
-          referenciaUsuario
-        );
+      const uid = credencial.user.uid;
+      const referenciaUsuario = doc(db, 'usuarios', uid);
+      const documentoUsuario = await getDoc(referenciaUsuario);
 
       if (!documentoUsuario.exists()) {
-
         this.mensaje =
           'El usuario no tiene un perfil registrado en el sistema.';
-
         this.tipoMensaje = 'danger';
-
         return;
       }
 
-      const datosUsuario =
-        documentoUsuario.data();
-
-      const nombre =
-        datosUsuario['nombre'] ?? '';
-
+      const datosUsuario = documentoUsuario.data();
+      const nombre = datosUsuario['nombre'] ?? '';
       const correo =
-        datosUsuario['correo'] ??
-        credencial.user.email ??
-        '';
+        datosUsuario['correo'] ?? credencial.user.email ?? '';
+      const rol = datosUsuario['rol'] ?? '';
 
-      const rol =
-        datosUsuario['rol'] ?? '';
-
-      if (
-        rol !== 'Administrador' &&
-        rol !== 'Vigilante'
-      ) {
-
-        this.mensaje =
-          'El usuario no tiene un rol válido.';
-
+      if (rol !== 'Administrador' && rol !== 'Vigilante') {
+        this.mensaje = 'El usuario no tiene un rol válido.';
         this.tipoMensaje = 'danger';
-
         return;
       }
 
       sessionStorage.setItem(
         'usuarioLogueado',
         JSON.stringify({
-          uid: uid,
-          nombre: nombre,
-          correo: correo,
-          rol: rol
+          uid,
+          nombre,
+          correo,
+          rol
         })
       );
 
       if (rol === 'Administrador') {
-
-        await this.router.navigate([
-          '/dashboard/administrador'
-        ]);
-
+        await this.router.navigate(['/dashboard/administrador']);
       } else {
-
-        await this.router.navigate([
-          '/dashboard/vigilante'
-        ]);
-
+        await this.router.navigate(['/dashboard/vigilante']);
       }
 
     } catch (error: any) {
-
-      console.error(
-        'Error al iniciar sesión:',
-        error
-      );
+      console.error('Error al iniciar sesión:', error);
 
       if (
         error.code === 'auth/invalid-credential' ||
         error.code === 'auth/wrong-password' ||
         error.code === 'auth/user-not-found'
       ) {
-
-        this.mensaje =
-          'Correo o contraseña incorrectos.';
-
-      } else if (
-        error.code === 'auth/invalid-email'
-      ) {
-
-        this.mensaje =
-          'El correo electrónico no es válido.';
-
+        this.mensaje = 'Correo o contraseña incorrectos.';
+      } else if (error.code === 'auth/invalid-email') {
+        this.mensaje = 'El correo electrónico no es válido.';
       } else {
-
         this.mensaje =
-          'No se pudo iniciar sesión. Intente nuevamente.';
-
+          'No se pudo iniciar sesión. Verifique la conexión e intente nuevamente.';
       }
 
       this.tipoMensaje = 'danger';
@@ -174,17 +120,10 @@ export class Login {
   }
 
   alternarContrasena(): void {
-
-    this.mostrarContrasena =
-      !this.mostrarContrasena;
+    this.mostrarContrasena = !this.mostrarContrasena;
   }
 
   irARecuperarContrasena(): void {
-
-    this.router.navigate([
-      '/recuperar-contrasena'
-    ]);
+    this.router.navigate(['/recuperar-contrasena']);
   }
-
 }
-
