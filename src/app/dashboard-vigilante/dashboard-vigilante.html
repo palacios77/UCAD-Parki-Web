@@ -4,7 +4,7 @@
 
     <div>
       <h1>Inicio</h1>
-      <p>Resumen actual del estacionamiento.</p>
+      <p>Toca una plaza libre para registrar una entrada, o una ocupada para registrar su salida.</p>
     </div>
 
     <button
@@ -13,7 +13,7 @@
       (click)="cargarInicio()"
       [disabled]="cargando()">
 
-      <i class="bi bi-arrow-clockwise"></i>
+      <i class="bi bi-arrow-clockwise" [class.girando]="cargando()"></i>
       Actualizar
 
     </button>
@@ -21,196 +21,167 @@
   </div>
 
 
-  <div class="estadisticas">
-
-    <div class="estadistica-card">
-
-      <div class="estadistica-icono azul">
-        <i class="bi bi-car-front"></i>
-      </div>
-
-      <div>
-        <span>Vehículos dentro</span>
-        <strong>{{ vehiculosDentro() }}</strong>
-      </div>
-
-    </div>
-
-
-    <div class="estadistica-card">
-
-      <div class="estadistica-icono verde">
-        <i class="bi bi-box-arrow-in-right"></i>
-      </div>
-
-      <div>
-        <span>Entradas de hoy</span>
-        <strong>{{ entradasHoy() }}</strong>
-      </div>
-
-    </div>
-
-
-    <div class="estadistica-card">
-
-      <div class="estadistica-icono naranja">
-        <i class="bi bi-box-arrow-right"></i>
-      </div>
-
-      <div>
-        <span>Salidas de hoy</span>
-        <strong>{{ salidasHoy() }}</strong>
-      </div>
-
-    </div>
-
-
-    <div class="estadistica-card">
-
-      <div class="estadistica-icono dinero">
-        <i class="bi bi-cash-stack"></i>
-      </div>
-
-      <div>
-        <span>Ingresos de hoy</span>
-        <strong>
-          ${{ ingresosHoy() | number:'1.2-2' }}
-        </strong>
-      </div>
-
-    </div>
-
-  </div>
-
-
   <section class="inicio-card">
 
-    <div class="card-header">
+    <div class="mapa-cabecera">
 
-      <div>
-        <h2>Últimos movimientos</h2>
-        <p>Actividad reciente del estacionamiento.</p>
+      <div class="ocupacion">
+
+        <svg class="anillo" viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="26" class="anillo-fondo" />
+          <circle
+            cx="32" cy="32" r="26"
+            class="anillo-valor"
+            [attr.stroke-dasharray]="arcoOcupacion() + ' ' + circunferencia"
+            transform="rotate(-90 32 32)" />
+        </svg>
+
+        <div class="ocupacion-texto">
+          <strong>{{ porcentajeOcupacion() }}%</strong>
+          <span>ocupación</span>
+        </div>
+
+        <div class="ocupacion-titulo">
+          <h2>Mapa del parqueo</h2>
+        </div>
+
+      </div>
+
+      <div class="chips">
+        <span class="chip libres">
+          <b>{{ plazasLibres() }}</b> libres
+        </span>
+
+        <span class="chip ocupadas">
+          <b>{{ plazasOcupadas() }}</b> ocupadas
+        </span>
+
+        @if (plazasSinVerificar() > 0) {
+          <span class="chip sin-verificar">
+            <b>{{ plazasSinVerificar() }}</b> sin verificar
+          </span>
+        }
       </div>
 
     </div>
 
+    @if (cargando() && plazas().length === 0) {
 
-    <div
-      *ngIf="cargando()"
-      class="estado-carga">
+      <div class="estado-carga">
+        <i class="bi bi-hourglass-split"></i>
+        Cargando plazas...
+      </div>
 
-      <i class="bi bi-hourglass-split"></i>
+    } @else if (plazas().length === 0) {
 
-      Cargando información...
+      <div class="estado-vacio">
+        <i class="bi bi-grid-3x3-gap"></i>
+        <h3>No hay plazas registradas</h3>
+        <p>Cuando existan plazas, se mostrarán aquí.</p>
+      </div>
 
-    </div>
+    } @else {
 
+      <div class="mapa-lote">
 
-    <div
-      *ngIf="!cargando() && historial().length === 0"
-      class="estado-vacio">
+        <div class="accesos">
+          <div class="acceso acceso-entrada">
+            <i class="bi bi-box-arrow-in-down"></i>
+            <span>Entrada</span>
+            <i class="barrera"></i>
+          </div>
 
-      <i class="bi bi-clock-history"></i>
+          <div class="acceso acceso-salida">
+            <i class="barrera"></i>
+            <span>Salida</span>
+            <i class="bi bi-box-arrow-up"></i>
+          </div>
+        </div>
 
-      <h3>No hay movimientos registrados</h3>
+        <div class="lote">
 
-      <p>
-        Las entradas y salidas aparecerán aquí.
-      </p>
+          @for (fila of filas(); track fila.indice) {
 
-    </div>
+            <div class="fila" [class.primera]="fila.indice === 0">
 
+              @for (plaza of fila.plazas; track plaza.id) {
 
-    <div
-      *ngIf="!cargando() && historial().length > 0"
-      class="tabla-contenedor">
+                <button
+                  type="button"
+                  class="plaza"
+                  [ngClass]="plaza.estado"
+                  [attr.aria-disabled]="plaza.estado === 'sin-verificar'"
+                  [attr.aria-label]="'Plaza ' + plaza.id + ': ' +
+                    (plaza.estado === 'libre' ? 'libre, registrar entrada'
+                      : plaza.estado === 'ocupada' ? 'ocupada' + (plaza.placa ? ', placa ' + plaza.placa : '') + ', registrar salida'
+                      : 'sin verificar')"
+                  (click)="abrirPlaza(plaza)">
 
-      <table>
+                  <span class="plaza-id">{{ plaza.id }}</span>
 
-        <thead>
+                  @if (plaza.estado === 'ocupada') {
 
-          <tr>
-            <th>Placa</th>
-            <th>Tipo de usuario</th>
-            <th>Entrada</th>
-            <th>Salida</th>
-            <th>Cobro</th>
-            <th>Estado</th>
-          </tr>
+                    @if (plaza.tiempo) {
+                      <span class="plaza-tiempo">
+                        <i class="bi bi-clock"></i> {{ plaza.tiempo }}
+                      </span>
+                    }
 
-        </thead>
+                    <app-vehiculo-icono class="plaza-auto" [tipo]="plaza.tipo" [color]="plaza.color" />
 
+                    @if (plaza.placa) {
+                      <span class="plaza-placa">{{ plaza.placa }}</span>
+                    }
 
-        <tbody>
+                    <span class="plaza-tip">
+                      <strong>{{ plaza.placa }}</strong>
+                      <span>{{ plaza.tipo }}</span>
+                      @if (plaza.propietario) {
+                        <span><i class="bi bi-person"></i> {{ plaza.propietario }}</span>
+                      }
+                      @if (plaza.tipoUsuario) {
+                        <span><i class="bi bi-tag"></i> {{ plaza.tipoUsuario }}</span>
+                      }
+                      @if (plaza.desde) {
+                        <span><i class="bi bi-box-arrow-in-right"></i> Entró a las {{ plaza.desde }}</span>
+                      }
+                      <em>Clic para registrar salida</em>
+                    </span>
 
-          <tr
-            *ngFor="let sesion of historial()">
+                  } @else if (plaza.estado === 'libre') {
 
-            <td>
-              <strong>
-                {{ sesion.placa }}
-              </strong>
-            </td>
+                    <span class="plaza-libre">P</span>
+                    <span class="plaza-accion">
+                      <i class="bi bi-plus-lg"></i> Entrada
+                    </span>
 
-            <td>
-              {{ sesion.tipoUsuario }}
-            </td>
+                  } @else {
 
-            <td>
-              {{
-                sesion.fechaEntrada
-                  | date:'dd/MM/yyyy HH:mm'
-              }}
-            </td>
+                    <i class="bi bi-question-circle plaza-sin"></i>
 
-            <td>
+                  }
 
-              <span *ngIf="sesion.fechaSalida">
-                {{
-                  sesion.fechaSalida
-                    | date:'dd/MM/yyyy HH:mm'
-                }}
-              </span>
+                </button>
 
-              <span
-                *ngIf="!sesion.fechaSalida"
-                class="pendiente">
-                Pendiente
-              </span>
+              }
 
-            </td>
+            </div>
 
-            <td>
-              <strong>
-                ${{ sesion.monto | number:'1.2-2' }}
-              </strong>
-            </td>
+            @if (fila.indice % 2 === 1 && fila.indice < filas().length - 1) {
+              <div class="carril" aria-hidden="true">
+                <span class="flecha"><i class="bi bi-chevron-double-right"></i></span>
+                <span class="flecha"><i class="bi bi-chevron-double-right"></i></span>
+                <span class="flecha"><i class="bi bi-chevron-double-right"></i></span>
+              </div>
+            }
 
-            <td>
+          }
 
-              <span
-                class="estado"
-                [ngClass]="
-                  sesion.estado === 'Abierta'
-                    ? 'estado-abierta'
-                    : 'estado-cerrada'
-                ">
+        </div>
 
-                <span class="punto"></span>
+      </div>
 
-                {{ sesion.estado }}
-
-              </span>
-
-            </td>
-
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
+    }
 
   </section>
 

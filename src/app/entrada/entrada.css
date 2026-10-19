@@ -1,75 +1,84 @@
 .entrada-pagina {
-  padding: 28px 30px;
-  box-sizing: border-box;
+  max-width: 860px;
+  padding: 32px;
 }
 
+/* ===== Título ===== */
+
 .entrada-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 24px;
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: #087fd1;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.volver:hover {
+  text-decoration: underline;
 }
 
 .entrada-titulo h1 {
   margin: 0;
-  color: #073b6b;
-  font-size: 24px;
-  font-weight: 700;
+  color: #073f73;
+  font-size: 28px;
 }
 
 .entrada-titulo p {
   margin: 6px 0 0;
-  color: #7b8794;
-  font-size: 13px;
+  color: #718096;
 }
+
+.plaza-asignada {
+  flex: none;
+  min-width: 112px;
+  padding: 12px 18px;
+  text-align: center;
+  background: #e5f7ec;
+  border: 1px solid #bfe3cb;
+  border-radius: 8px;
+}
+
+.plaza-asignada span {
+  display: block;
+  color: #19733c;
+  font-size: 12px;
+}
+
+.plaza-asignada strong {
+  display: block;
+  margin-top: 2px;
+  color: #19733c;
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+/* ===== Tarjetas ===== */
 
 .entrada-card {
-  margin-bottom: 20px;
-  background-color: #ffffff;
-  border: 1px solid #e1e7ed;
-  border-radius: 8px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
-}
-
-.entrada-card-header {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  border-bottom: 1px solid #e5e9ee;
-}
-
-.entrada-icono {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background-color: #e8f6ee;
-  color: #198754;
-  font-size: 18px;
-}
-
-.entrada-card-header h2 {
-  margin: 0;
-  color: #27384a;
-  font-size: 16px;
-}
-
-.entrada-card-header p {
-  margin: 4px 0 0;
-  color: #8a96a3;
-  font-size: 11px;
-}
-
-.entrada-buscador {
+  margin-bottom: 18px;
   padding: 22px;
+  background: white;
+  border: 1px solid #e1e7ef;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.entrada-buscador label,
+.entrada-card > label,
 .form-group label {
   display: block;
-  margin-bottom: 7px;
-  color: #425466;
-  font-size: 12px;
+  margin-bottom: 6px;
+  color: #536273;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -80,202 +89,245 @@
 
 .entrada-campo input {
   flex: 1;
-  height: 42px;
-  padding: 0 13px;
-  box-sizing: border-box;
-  border: 1px solid #d5dde5;
-  border-radius: 6px;
-  outline: none;
-  font-family: inherit;
-  font-size: 13px;
+  min-width: 0;
 }
 
-.entrada-campo input:focus,
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #2878b8;
-  box-shadow: 0 0 0 2px rgba(40, 120, 184, 0.1);
+.entrada-card input,
+.entrada-card select {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #cfd8e3;
+  border-radius: 6px;
+  background: white;
+  color: #2d3a4a;
+  font: inherit;
+  font-size: 14px;
 }
 
-.entrada-campo button {
-  height: 42px;
-  padding: 0 18px;
-  border: none;
+.entrada-card input:focus,
+.entrada-card select:focus {
+  outline: 2px solid #087fd1;
+  outline-offset: 0;
+  border-color: #087fd1;
+}
+
+.entrada-card input:disabled {
+  background: #f3f6fa;
+}
+
+/* ===== Botones ===== */
+
+.btn-buscar,
+.btn-entrada,
+.btn-cancelar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
   border-radius: 6px;
-  background-color: #087bd1;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 12px;
+  font: inherit;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.entrada-campo button:hover {
-  background-color: #076db9;
+.btn-buscar {
+  border: 1px solid #087fd1;
+  background: #087fd1;
+  color: white;
 }
 
+.btn-entrada {
+  border: 1px solid #218838;
+  background: #218838;
+  color: white;
+}
+
+.btn-cancelar {
+  border: 1px solid #cfd8e3;
+  background: white;
+  color: #536273;
+}
+
+.btn-buscar:hover:not(:disabled),
+.btn-entrada:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background: #f5f7fa;
+}
+
+.btn-buscar:focus-visible,
+.btn-entrada:focus-visible,
+.btn-cancelar:focus-visible {
+  outline: 3px solid #f2b632;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== Mensajes ===== */
+
 .entrada-mensaje {
-  margin-bottom: 20px;
-  padding: 12px 15px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .mensaje-exito {
-  background-color: #e8f6ee;
-  color: #18733f;
+  background: #e5f7ec;
+  color: #19733c;
 }
 
 .mensaje-error {
-  background-color: #fbeaea;
-  color: #a52d2d;
+  background: #fdecec;
+  color: #a82f2f;
 }
 
-.card-titulo {
-  padding: 18px 20px;
-  border-bottom: 1px solid #e5e9ee;
+/* ===== Vehículo encontrado ===== */
+
+.vehiculo-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5eaf0;
 }
 
-.card-titulo h2 {
-  margin: 0;
-  color: #27384a;
-  font-size: 16px;
+.vehiculo-identidad {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.card-titulo p {
-  margin: 5px 0 0;
-  color: #8a96a3;
-  font-size: 11px;
+.vehiculo-icono {
+  flex: none;
+  width: 30px;
+  height: 54px;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
+}
+
+.vehiculo-placa {
+  display: block;
+  color: #123f6b;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.vehiculo-detalle {
+  display: block;
+  margin-top: 3px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.estado-chip {
+  flex: none;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estado-chip.estado-fuera {
+  background: #e5f7ec;
+  color: #19733c;
+}
+
+.estado-chip.estado-dentro {
+  background: #fdecec;
+  color: #a82f2f;
 }
 
 .vehiculo-datos {
-  padding: 22px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 16px 0 4px;
 }
 
 .vehiculo-datos span {
   display: block;
-  margin-bottom: 5px;
-  color: #8995a2;
-  font-size: 11px;
+  margin-bottom: 3px;
+  color: #718096;
+  font-size: 12px;
 }
 
 .vehiculo-datos strong {
-  color: #354656;
-  font-size: 13px;
-}
-
-.estado-dentro {
-  color: #d33b3b !important;
-}
-
-.estado-fuera {
-  color: #198754 !important;
+  color: #123f6b;
+  font-size: 15px;
 }
 
 .entrada-accion {
-  padding: 0 22px 22px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
 }
 
-.btn-entrada,
-.btn-registrar {
-  height: 40px;
-  padding: 0 17px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: none;
-  border-radius: 6px;
-  background-color: #198754;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
+/* ===== Vehículo nuevo ===== */
+
+.card-titulo h2 {
+  margin: 0;
+  color: #123f6b;
+  font-size: 19px;
 }
 
-.btn-entrada:hover,
-.btn-registrar:hover {
-  background-color: #157347;
-}
-
-.registro-card {
-  overflow: hidden;
+.card-titulo p {
+  margin: 5px 0 0;
+  color: #7b8794;
+  font-size: 13px;
 }
 
 .formulario-vehiculo {
-  padding: 22px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  height: 40px;
-  padding: 0 11px;
-  box-sizing: border-box;
-  border: 1px solid #d5dde5;
-  border-radius: 6px;
-  background-color: #ffffff;
-  color: #354656;
-  font-family: inherit;
-  font-size: 12px;
-  outline: none;
-}
-
-.form-group input[readonly] {
-  background-color: #f4f6f8;
-  color: #6d7985;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 18px;
+  margin-top: 18px;
 }
 
 .registro-acciones {
-  padding: 18px 22px;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  border-top: 1px solid #e5e9ee;
+  margin-top: 22px;
 }
 
-.btn-cancelar {
-  height: 40px;
-  padding: 0 16px;
-  border: 1px solid #d5dde5;
-  border-radius: 6px;
-  background-color: #ffffff;
-  color: #687686;
-  font-family: inherit;
-  font-size: 12px;
-  cursor: pointer;
-}
+@media (max-width: 700px) {
+  .entrada-pagina {
+    padding: 20px;
+  }
 
-.btn-registrar {
-  background-color: #087bd1;
-}
-
-.btn-registrar:hover {
-  background-color: #076db9;
-}
-
-@media (max-width: 800px) {
-
-  .vehiculo-datos,
-  .formulario-vehiculo {
-    grid-template-columns: 1fr;
+  .entrada-titulo {
+    flex-direction: column;
   }
 
   .entrada-campo {
     flex-direction: column;
   }
 
-  .entrada-campo button {
-    width: 100%;
+  .vehiculo-datos,
+  .formulario-vehiculo {
+    grid-template-columns: 1fr;
   }
 
+  .registro-acciones,
+  .entrada-accion {
+    flex-direction: column-reverse;
+  }
+
+  .btn-entrada,
+  .btn-cancelar {
+    width: 100%;
+  }
 }

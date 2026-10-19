@@ -2,8 +2,8 @@
 
   <div class="historial-titulo">
     <div>
-      <h1>Historial</h1>
-      <p>Consulta las entradas y salidas registradas.</p>
+      <h1>Historial de tickets</h1>
+      <p>Cada entrada genera un ticket; al registrar la salida se cierra con su cobro.</p>
     </div>
 
     <button
@@ -23,11 +23,64 @@
     <div class="card-header">
 
       <div>
-        <h2>Movimientos registrados</h2>
+        <h2>Tickets emitidos</h2>
 
         <p>
-          {{ historial().length }} movimiento(s)
+          {{ filtradas().length }} ticket(s)
+          @if (filtradas().length !== historial().length) {
+            de {{ historial().length }}
+          }
         </p>
+      </div>
+
+    </div>
+
+    <div *ngIf="historial().length > 0" class="filtros-historial">
+
+      <input
+        type="text"
+        [ngModel]="filtro()"
+        (ngModelChange)="cambiarFiltro($event)"
+        placeholder="Buscar por placa, ticket o tipo de usuario" />
+
+      <select
+        [ngModel]="filtroEstado()"
+        (ngModelChange)="cambiarEstado($event)">
+        <option value="">Todos los estados</option>
+        <option value="Abierta">Abierta</option>
+        <option value="Cerrada">Cerrada</option>
+      </select>
+
+    </div>
+
+    <div *ngIf="historial().length > 0" class="filtros-fechas">
+
+      <div class="atajos">
+        <button type="button" [class.activo]="rango() === 'hoy'" (click)="elegirRango('hoy')">Hoy</button>
+        <button type="button" [class.activo]="rango() === '7dias'" (click)="elegirRango('7dias')">Últimos 7 días</button>
+        <button type="button" [class.activo]="rango() === 'todo'" (click)="elegirRango('todo')">Todo</button>
+      </div>
+
+      <div>
+        <label for="desde">Desde</label>
+        <input
+          id="desde"
+          type="date"
+          [ngModel]="desde()"
+          (ngModelChange)="cambiarFecha('desde', $event)" />
+      </div>
+
+      <div>
+        <label for="hasta">Hasta</label>
+        <input
+          id="hasta"
+          type="date"
+          [ngModel]="hasta()"
+          (ngModelChange)="cambiarFecha('hasta', $event)" />
+      </div>
+
+      <div class="total-rango">
+        Total cobrado: <strong>${{ totalCobrado() | number:'1.2-2' }}</strong>
       </div>
 
     </div>
@@ -48,7 +101,7 @@
 
       <i class="bi bi-clock-history"></i>
 
-      <h3>No hay movimientos registrados</h3>
+      <h3>No hay tickets registrados</h3>
 
       <p>
         Las entradas y salidas aparecerán aquí.
@@ -57,7 +110,19 @@
     </div>
 
     <div
-      *ngIf="!cargando() && historial().length > 0"
+      *ngIf="!cargando() && historial().length > 0 && filtradas().length === 0"
+      class="estado-vacio">
+
+      <i class="bi bi-search"></i>
+
+      <h3>Sin resultados</h3>
+
+      <p>Ningún ticket coincide con la búsqueda.</p>
+
+    </div>
+
+    <div
+      *ngIf="!cargando() && filtradas().length > 0"
       class="tabla-contenedor">
 
       <table>
@@ -65,25 +130,40 @@
         <thead>
 
           <tr>
-            <th>Placa</th>
+            <th>Ticket</th>
+            <th>Vehículo</th>
             <th>Tipo de usuario</th>
             <th>Entrada</th>
             <th>Salida</th>
             <th>Tiempo</th>
             <th>Cobro</th>
             <th>Estado</th>
+            <th></th>
           </tr>
 
         </thead>
 
         <tbody>
 
-          <tr *ngFor="let sesion of historial()">
+          <tr *ngFor="let sesion of visibles()">
 
             <td>
-              <strong>
-                {{ sesion.placa }}
-              </strong>
+              <span class="num-ticket">{{ numeroTicket(sesion) }}</span>
+            </td>
+
+            <td>
+              <div class="placa-con-icono">
+                <app-vehiculo-icono
+                  class="icono-vehiculo"
+                  [tipo]="vehiculo(sesion.placa).tipo"
+                  [color]="vehiculo(sesion.placa).color"
+                />
+
+                <div>
+                  <strong>{{ sesion.placa }}</strong>
+                  <small>{{ vehiculo(sesion.placa).tipo }}</small>
+                </div>
+              </div>
             </td>
 
             <td>
@@ -142,6 +222,12 @@
 
             </td>
 
+            <td>
+              <button type="button" class="btn-ticket" (click)="verTicket(sesion)">
+                Ver ticket
+              </button>
+            </td>
+
           </tr>
 
         </tbody>
@@ -150,6 +236,55 @@
 
     </div>
 
+    <app-paginacion
+      [total]="filtradas().length"
+      [pagina]="pagina()"
+      [porPagina]="porPagina"
+      (cambio)="pagina.set($event)" />
+
   </section>
 
 </div>
+
+@if (ticket(); as t) {
+  <div class="ticket-fondo" (click)="cerrarTicket()">
+
+    <div class="ticket-modal" (click)="$event.stopPropagation()">
+
+      <div class="ticket-cabecera">
+        <app-vehiculo-icono
+          class="icono-grande"
+          [tipo]="vehiculo(t.placa).tipo"
+          [color]="vehiculo(t.placa).color" />
+
+        <div>
+          <h3>Ticket {{ numeroTicket(t) }}</h3>
+          <span>{{ vehiculo(t.placa).tipo }}</span>
+        </div>
+      </div>
+
+      <div class="ticket-papel">
+        <div class="titulo">UCAD PARKI</div>
+        <div class="linea"><span>Placa</span><strong>{{ t.placa }}</strong></div>
+        <div class="linea"><span>Tipo</span><strong>{{ t.tipoUsuario }}</strong></div>
+        <div class="linea"><span>Entrada</span><strong>{{ t.fechaEntrada | date:'dd/MM/yyyy HH:mm' }}</strong></div>
+        <div class="linea">
+          <span>Salida</span>
+          <strong>{{ t.fechaSalida ? (t.fechaSalida | date:'dd/MM/yyyy HH:mm') : 'Pendiente' }}</strong>
+        </div>
+        <div class="linea"><span>Tiempo</span><strong>{{ t.tiempoEstacionado || 'En curso' }}</strong></div>
+        <div class="linea"><span>Estado</span><strong>{{ t.estado }}</strong></div>
+        <div class="total">
+          <span>{{ t.estado === 'Cerrada' ? 'Total cobrado' : 'Cobro actual' }}</span>
+          <strong>${{ t.monto | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <button type="button" class="btn-cerrar-ticket" (click)="cerrarTicket()">
+        Cerrar
+      </button>
+
+    </div>
+
+  </div>
+}

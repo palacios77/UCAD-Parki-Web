@@ -2,79 +2,53 @@
 
   <div class="entrada-titulo">
 
-    <h1>Registrar entrada</h1>
+    <div>
+      <a class="volver" routerLink="/dashboard/vigilante">
+        <i class="bi bi-arrow-left"></i>
+        Volver al mapa
+      </a>
 
-    <p>
-      Busca la placa para registrar el ingreso de un vehículo.
-    </p>
+      <h1>Registrar entrada</h1>
+      <p>Busca la placa para registrar el ingreso de un vehículo.</p>
+    </div>
+
+    <div class="plaza-asignada" *ngIf="plazaSeleccionada">
+      <span>Plaza asignada</span>
+      <strong>{{ plazaSeleccionada }}</strong>
+    </div>
 
   </div>
 
 
   <section class="entrada-card">
 
-    <div class="entrada-card-header">
+    <label for="placa">Número de placa</label>
 
-      <div class="entrada-icono">
-        <i class="bi bi-box-arrow-in-right"></i>
-      </div>
+    <div class="entrada-campo">
+      <input
+        type="text"
+        id="placa"
+        [(ngModel)]="placa"
+        placeholder="Ejemplo: ABC-123"
+        maxlength="10"
+        autocomplete="off"
+        [disabled]="buscando || registrando"
+        (keyup.enter)="buscarVehiculo()"
+      />
 
-      <div>
-
-        <h2>Entrada de vehículo</h2>
-
-        <p>
-          Ingrese el número de placa.
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="entrada-buscador">
-
-      <label for="placa">
-        Número de placa
-      </label>
-
-      <div class="entrada-campo">
-
-        <input
-          type="text"
-          id="placa"
-          [(ngModel)]="placa"
-          placeholder="Ejemplo: ABC-123"
-          maxlength="10"
-          [disabled]="buscando || registrando"
-          (keyup.enter)="buscarVehiculo()">
-
-        <button
-          type="button"
-          (click)="buscarVehiculo()"
-          [disabled]="buscando || registrando">
-
-          <i
-            class="bi"
-            [ngClass]="
-              buscando
-                ? 'bi-hourglass-split'
-                : 'bi-search'
-            ">
-          </i>
-
-          <span *ngIf="!buscando">
-            Buscar
-          </span>
-
-          <span *ngIf="buscando">
-            Buscando...
-          </span>
-
-        </button>
-
-      </div>
-
+      <button
+        type="button"
+        class="btn-buscar"
+        (click)="buscarVehiculo()"
+        [disabled]="buscando || registrando"
+      >
+        <i
+          class="bi"
+          [ngClass]="buscando ? 'bi-hourglass-split' : 'bi-search'"
+        ></i>
+        <span *ngIf="!buscando">Buscar</span>
+        <span *ngIf="buscando">Buscando...</span>
+      </button>
     </div>
 
   </section>
@@ -86,140 +60,88 @@
     [ngClass]="{
       'mensaje-exito': tipoMensaje === 'exito',
       'mensaje-error': tipoMensaje === 'error'
-    }">
-
+    }"
+  >
     <i
       class="bi"
       [ngClass]="{
         'bi-check-circle': tipoMensaje === 'exito',
         'bi-exclamation-circle': tipoMensaje === 'error'
-      }">
-    </i>
-
+      }"
+    ></i>
     {{ mensaje }}
-
   </div>
 
 
   <section
     *ngIf="vehiculoEncontrado"
-    class="entrada-card vehiculo-card">
+    class="entrada-card vehiculo-card"
+  >
 
-    <div class="card-titulo">
+    <div class="vehiculo-cabecera">
 
-      <h2>Vehículo encontrado</h2>
+      <div class="vehiculo-identidad">
+
+        <app-vehiculo-icono
+          class="vehiculo-icono"
+          [tipo]="tipoDe(vehiculoEncontrado)"
+          [color]="colorVehiculo(vehiculoEncontrado.color, vehiculoEncontrado.placa)"
+        />
+
+        <div>
+          <span class="vehiculo-placa">{{ vehiculoEncontrado.placa }}</span>
+          <span class="vehiculo-detalle">
+            {{ tipoDe(vehiculoEncontrado) }}
+            · {{ vehiculoEncontrado.marca }}
+            {{ vehiculoEncontrado.modelo }}
+            · {{ vehiculoEncontrado.color }}
+          </span>
+        </div>
+
+      </div>
+
+      <span
+        class="estado-chip"
+        [class.estado-dentro]="vehiculoEncontrado.dentro"
+        [class.estado-fuera]="!vehiculoEncontrado.dentro"
+      >
+        {{ vehiculoEncontrado.dentro ? 'Dentro' : 'Fuera' }}
+      </span>
 
     </div>
-
 
     <div class="vehiculo-datos">
-
       <div>
-
-        <span>Placa</span>
-
-        <strong>
-          {{ vehiculoEncontrado.placa }}
-        </strong>
-
-      </div>
-
-
-      <div>
-
         <span>Propietario</span>
-
-        <strong>
-          {{ vehiculoEncontrado.propietario }}
-        </strong>
-
+        <strong>{{ vehiculoEncontrado.propietario }}</strong>
       </div>
 
-
       <div>
-
         <span>Tipo de usuario</span>
-
-        <strong>
-          {{ vehiculoEncontrado.tipoUsuario }}
-        </strong>
-
+        <strong>{{ vehiculoEncontrado.tipoUsuario }}</strong>
       </div>
-
-
-      <div>
-
-        <span>Vehículo</span>
-
-        <strong>
-          {{ vehiculoEncontrado.marca }}
-          {{ vehiculoEncontrado.modelo }}
-        </strong>
-
-      </div>
-
-
-      <div>
-
-        <span>Color</span>
-
-        <strong>
-          {{ vehiculoEncontrado.color }}
-        </strong>
-
-      </div>
-
-
-      <div>
-
-        <span>Estado</span>
-
-        <strong
-          [class.estado-dentro]="vehiculoEncontrado.dentro"
-          [class.estado-fuera]="!vehiculoEncontrado.dentro">
-
-          {{
-            vehiculoEncontrado.dentro
-              ? 'Dentro'
-              : 'Fuera'
-          }}
-
-        </strong>
-
-      </div>
-
     </div>
 
-
-    <div
-      *ngIf="!vehiculoEncontrado.dentro"
-      class="entrada-accion">
-
+    <div class="entrada-accion" *ngIf="!vehiculoEncontrado.dentro">
       <button
         type="button"
         class="btn-entrada"
         (click)="registrarEntrada()"
-        [disabled]="registrando">
-
+        [disabled]="registrando || cargandoPlazas || !plazaSeleccionada"
+      >
         <i
           class="bi"
-          [ngClass]="
-            registrando
-              ? 'bi-hourglass-split'
-              : 'bi-box-arrow-in-right'
-          ">
-        </i>
+          [ngClass]="registrando ? 'bi-hourglass-split' : 'bi-box-arrow-in-right'"
+        ></i>
 
-        <span *ngIf="!registrando">
-          Registrar entrada
+        <span *ngIf="registrando">Registrando...</span>
+        <span *ngIf="!registrando && plazaSeleccionada">
+          Registrar entrada en {{ plazaSeleccionada }}
         </span>
-
-        <span *ngIf="registrando">
-          Registrando...
+        <span *ngIf="!registrando && !plazaSeleccionada">
+          Sin plazas libres
         </span>
-
       </button>
-
     </div>
 
   </section>
@@ -227,141 +149,85 @@
 
   <section
     *ngIf="mostrarFormulario"
-    class="entrada-card registro-card">
+    class="entrada-card registro-card"
+  >
 
     <div class="card-titulo">
-
-      <h2>Registrar vehículo</h2>
-
-      <p>
-        La placa no está registrada.
-        Complete los datos del vehículo.
-      </p>
-
+      <h2>Vehículo nuevo</h2>
+      <p>La placa no está registrada. Complete los datos para registrarlo y dar la entrada.</p>
     </div>
-
 
     <div class="formulario-vehiculo">
 
       <div class="form-group">
-
-        <label for="nuevoPlaca">
-          Placa
-        </label>
-
-        <input
-          id="nuevoPlaca"
-          type="text"
-          [(ngModel)]="nuevoVehiculo.placa"
-          readonly>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="propietario">
-          Propietario
-        </label>
-
+        <label for="propietario">Propietario</label>
         <input
           id="propietario"
           type="text"
           [(ngModel)]="nuevoVehiculo.propietario"
-          placeholder="Nombre del propietario">
-
+          placeholder="Nombre del propietario"
+        />
       </div>
 
-
       <div class="form-group">
-
-        <label for="tipoUsuario">
-          Tipo de usuario
-        </label>
-
+        <label for="tipoUsuario">Tipo de usuario</label>
         <select
           id="tipoUsuario"
-          [(ngModel)]="nuevoVehiculo.tipoUsuario">
-
-          <option value="">
-            Seleccione una opción
-          </option>
-
-          <option value="Estudiante">
-            Estudiante
-          </option>
-
-          <option value="Docente">
-            Docente
-          </option>
-
-          <option value="Administrativo">
-            Administrativo
-          </option>
-
-          <option value="Empleado">
-            Empleado
-          </option>
-
-          <option value="Vigilante">
-            Vigilante
-          </option>
-
-          <option value="Invitado">
-            Invitado
-          </option>
-
+          [(ngModel)]="nuevoVehiculo.tipoUsuario"
+        >
+          <option value="">Seleccione una opción</option>
+          <option value="Estudiante">Estudiante</option>
+          <option value="Docente">Docente</option>
+          <option value="Administrativo">Administrativo</option>
+          <option value="Empleado">Empleado</option>
+          <option value="Vigilante">Vigilante</option>
+          <option value="Invitado">Invitado</option>
         </select>
-
       </div>
 
+      <div class="form-group">
+        <label for="tipoVehiculo">Tipo de vehículo</label>
+        <select
+          id="tipoVehiculo"
+          [(ngModel)]="nuevoVehiculo.tipoVehiculo"
+        >
+          <option *ngFor="let tipo of tiposVehiculo" [value]="tipo">
+            {{ tipo }}
+          </option>
+        </select>
+      </div>
 
       <div class="form-group">
-
-        <label for="marca">
-          Marca
-        </label>
-
+        <label for="marca">Marca</label>
         <input
           id="marca"
           type="text"
           [(ngModel)]="nuevoVehiculo.marca"
-          placeholder="Ejemplo: Toyota">
-
+          placeholder="Ejemplo: Toyota"
+        />
       </div>
 
-
       <div class="form-group">
-
-        <label for="modelo">
-          Modelo
-        </label>
-
+        <label for="modelo">Modelo</label>
         <input
           id="modelo"
           type="text"
           [(ngModel)]="nuevoVehiculo.modelo"
-          placeholder="Ejemplo: Corolla">
-
+          placeholder="Ejemplo: Corolla"
+        />
       </div>
 
-
       <div class="form-group">
-
-        <label for="color">
-          Color
-        </label>
-
+        <label for="color">Color</label>
         <input
           id="color"
           type="text"
           [(ngModel)]="nuevoVehiculo.color"
-          placeholder="Ejemplo: Blanco">
-
+          placeholder="Ejemplo: Blanco"
+        />
       </div>
 
     </div>
-
 
     <div class="registro-acciones">
 
@@ -369,36 +235,29 @@
         type="button"
         class="btn-cancelar"
         (click)="cancelarRegistro()"
-        [disabled]="registrando">
-
+        [disabled]="registrando"
+      >
         Cancelar
-
       </button>
-
 
       <button
         type="button"
-        class="btn-registrar"
+        class="btn-entrada"
         (click)="registrarVehiculo()"
-        [disabled]="registrando">
-
+        [disabled]="registrando || cargandoPlazas || !plazaSeleccionada"
+      >
         <i
           class="bi"
-          [ngClass]="
-            registrando
-              ? 'bi-hourglass-split'
-              : 'bi-check-lg'
-          ">
-        </i>
+          [ngClass]="registrando ? 'bi-hourglass-split' : 'bi-check-lg'"
+        ></i>
 
-        <span *ngIf="!registrando">
-          Registrar vehículo
+        <span *ngIf="registrando">Registrando...</span>
+        <span *ngIf="!registrando && plazaSeleccionada">
+          Registrar vehículo y entrada en {{ plazaSeleccionada }}
         </span>
-
-        <span *ngIf="registrando">
-          Registrando...
+        <span *ngIf="!registrando && !plazaSeleccionada">
+          Sin plazas libres
         </span>
-
       </button>
 
     </div>

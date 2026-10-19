@@ -19,4 +19,3 @@ export class LayoutAdministrador {
     this.menuAbierto = false;
   }
 }
-

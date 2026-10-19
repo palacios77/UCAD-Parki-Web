@@ -1,141 +1,212 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Timestamp } from 'firebase/firestore';
 
 import { ParqueoService } from '../servicios/parqueo.service';
+import { Vehiculo } from '../modelos/vehiculo.model';
+import { TipoVehiculo, colorVehiculo, tipoDe } from '../modelos/tipo-vehiculo';
+import { VehiculoIcono } from '../vehiculo-icono/vehiculo-icono';
+
+type SesionAbierta = NonNullable<
+  Awaited<ReturnType<ParqueoService['buscarSesionAbierta']>>
+>;
+
+interface FilaSalida {
+  plaza: string;
+  placa: string;
+  tipoUsuario: string;
+  tipoVehiculo: TipoVehiculo;
+  color: string;
+}
 
 @Component({
   selector: 'app-salida',
-  imports: [
-    CommonModule,
-    FormsModule,
-    DatePipe
-  ],
+  imports: [CommonModule, FormsModule, RouterLink, VehiculoIcono],
   templateUrl: './salida.html',
   styleUrl: './salida.css'
 })
-export class Salida {
-  placa: string = '';
-  mensaje = signal('');
-  tipoMensaje = signal('');
-  sesionEncontrada = signal<
-    Awaited<ReturnType<ParqueoService['buscarSesionAbierta']>>
-  >(null);
-  buscando = signal(false);
-  procesandoSalida = signal(false);
-  montoCalculado = signal(0);
+export class Salida implements OnInit {
+  filas: FilaSalida[] = [];
+  filtro = '';
+
+  seleccionada: FilaSalida | null = null;
+  sesion: SesionAbierta | null = null;
+
+  // Datos del ticket
+  entrada = '';
+  tiempo = '';
+  total = 0;
+
+  cargando = false;
+  procesando = false;
+  mensaje = '';
+  tipoMensaje: 'exito' | 'error' | '' = '';
 
   constructor(
-    private parqueoService: ParqueoService
+    private parqueoService: ParqueoService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  async buscarSesion(): Promise<void> {
-    if (
-      this.buscando() ||
-      this.procesandoSalida()
-    ) {
-      return;
-    }
+  async ngOnInit(): Promise<void> {
+    await this.cargarOcupadas();
 
-    this.mensaje.set('');
-    this.tipoMensaje.set('');
-    this.sesionEncontrada.set(null);
-    this.montoCalculado.set(0);
+    // Si llegas desde el mapa, el vehículo ya viene seleccionado.
+    const params = this.route.snapshot.queryParamMap;
+    const plaza = params.get('plaza');
+    const placa = params.get('placa');
 
-    const placaBuscada = this.placa.trim().toUpperCase();
+    const fila = this.filas.find(
+      f => (placa && f.placa === placa.toUpperCase()) || (plaza && f.plaza === plaza)
+    );
 
-    if (placaBuscada === '') {
-      this.mensaje.set(
-        'Ingrese una placa.'
-      );
-      this.tipoMensaje.set('error');
-      return;
-    }
-
-    this.placa = placaBuscada;
-    this.buscando.set(true);
-
-    try {
-      const sesion =
-        await this.parqueoService
-          .buscarSesionAbierta(
-            placaBuscada
-          );
-
-      if (!sesion) {
-        this.mensaje.set(
-          'No hay una entrada abierta para esta placa.'
-        );
-        this.tipoMensaje.set('error');
-        return;
-      }
-
-      this.sesionEncontrada.set(sesion);
-
-      const fechaSalida =
-        Timestamp.now();
-
-      const monto =
-        this.parqueoService.calcularCobro(
-          sesion.tipoUsuario,
-          sesion.fechaEntrada,
-          fechaSalida
-        );
-
-      this.montoCalculado.set(monto);
-    } catch (error) {
-      console.error(
-        'Error al buscar sesión:',
-        error
-      );
-      this.mensaje.set(
-        'No fue posible consultar la salida.'
-      );
-      this.tipoMensaje.set('error');
-    } finally {
-      this.buscando.set(false);
+    if (fila) {
+      await this.seleccionar(fila);
+    } else if (plaza || placa) {
+      this.mostrar('Esa plaza ya no tiene un vehículo dentro.', 'error');
     }
   }
 
-  async registrarSalida(): Promise<void> {
-    const sesion =
-      this.sesionEncontrada();
+  get filasFiltradas(): FilaSalida[] {
+    const texto = this.filtro.trim().toLowerCase();
 
-    if (
-      !sesion ||
-      this.procesandoSalida()
-    ) {
-      return;
-    }
+    return texto
+      ? this.filas.filter(
+          f =>
+            f.placa.toLowerCase().includes(texto) ||
+            f.plaza.toLowerCase().includes(texto)
+        )
+      : this.filas;
+  }
 
-    this.procesandoSalida.set(true);
-    this.mensaje.set('');
-    this.tipoMensaje.set('');
+  async cargarOcupadas(): Promise<void> {
+    this.cargando = true;
 
     try {
-      const monto =
-        await this.parqueoService
-          .registrarSalida(sesion);
+      const [plazas, vehiculos] = await Promise.all([
+        this.parqueoService.listarPlazas(),
+        this.parqueoService.listarVehiculos()
+      ]);
 
-      this.montoCalculado.set(monto);
-      this.mensaje.set(
-        'Salida registrada correctamente.'
-      );
-      this.tipoMensaje.set('exito');
-      this.sesionEncontrada.set(null);
-      this.placa = '';
+      const porId = new Map<string, Vehiculo>();
+      vehiculos.forEach(v => v.id && porId.set(v.id, v));
+
+      this.filas = plazas
+        .filter(p => p.estado === 'Ocupada' && !!p.placa)
+        .map(p => {
+          const v = p.vehiculoId ? porId.get(p.vehiculoId) : undefined;
+          const placa = (p.placa ?? '').toUpperCase();
+
+          return {
+            plaza: p.id,
+            placa,
+            tipoUsuario: v?.tipoUsuario ?? '',
+            tipoVehiculo: tipoDe(v ?? {}),
+            color: colorVehiculo(v?.color, placa)
+          };
+        });
     } catch (error) {
-      console.error(
-        'Error al registrar salida:',
-        error
-      );
-      this.mensaje.set(
-        'No fue posible registrar la salida.'
-      );
-      this.tipoMensaje.set('error');
+      console.error('Error al cargar vehículos dentro:', error);
+      this.mostrar('No fue posible consultar los vehículos.', 'error');
     } finally {
-      this.procesandoSalida.set(false);
+      this.cargando = false;
+      this.cdr.markForCheck();
     }
+  }
+
+  async seleccionar(fila: FilaSalida): Promise<void> {
+    this.mensaje = '';
+    this.tipoMensaje = '';
+    this.seleccionada = fila;
+    this.sesion = null;
+
+    try {
+      const sesion = await this.parqueoService.buscarSesionAbierta(fila.placa);
+
+      if (!sesion) {
+        this.seleccionada = null;
+        this.mostrar('Este vehículo no tiene una entrada abierta.', 'error');
+        return;
+      }
+
+      this.sesion = sesion;
+      this.calcularTicket();
+    } catch (error) {
+      console.error('Error al buscar sesión:', error);
+      this.seleccionada = null;
+      this.mostrar('No fue posible consultar la entrada del vehículo.', 'error');
+    } finally {
+      this.cdr.markForCheck();
+    }
+  }
+
+  cancelar(): void {
+    this.seleccionada = null;
+    this.sesion = null;
+  }
+
+  private calcularTicket(): void {
+    if (!this.sesion) return;
+
+    const ahora = Timestamp.now();
+    const fechaEntrada = this.sesion.fechaEntrada;
+    const minutos = Math.max(
+      0,
+      Math.round((ahora.toMillis() - fechaEntrada.toMillis()) / 60000)
+    );
+
+    this.entrada = fechaEntrada.toDate().toLocaleTimeString('es-SV', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    this.tiempo =
+      minutos >= 60
+        ? `${Math.floor(minutos / 60)} h ${minutos % 60} min`
+        : `${minutos} min`;
+
+    this.total = this.parqueoService.calcularCobro(
+      this.sesion.tipoUsuario,
+      fechaEntrada,
+      ahora
+    );
+  }
+
+  async cobrarYRegistrar(): Promise<void> {
+    if (!this.sesion || !this.seleccionada || this.procesando) return;
+
+    this.procesando = true;
+    this.cdr.markForCheck();
+
+    const { placa, plaza } = this.seleccionada;
+
+    try {
+      const monto = await this.parqueoService.registrarSalida(this.sesion);
+
+      this.mostrar(
+        monto > 0
+          ? `Salida registrada: ${placa} (plaza ${plaza}). Cobrado: $${monto.toFixed(2)}.`
+          : `Salida registrada: ${placa} (plaza ${plaza}). Sin cobro.`,
+        'exito'
+      );
+
+      this.seleccionada = null;
+      this.sesion = null;
+      await this.cargarOcupadas();
+    } catch (error) {
+      console.error('Error al registrar salida:', error);
+      this.mostrar('No fue posible registrar la salida.', 'error');
+    } finally {
+      this.procesando = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private mostrar(texto: string, tipo: 'exito' | 'error'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.markForCheck();
   }
 }

@@ -1,288 +1,101 @@
-<div class="vehiculos-pagina">
+<div class="veh-pagina">
 
-  <div class="vehiculos-titulo">
+  <div class="veh-pagina-titulo">
     <div>
       <h1>Vehículos</h1>
-      <p>Consulta y administra los vehículos registrados.</p>
+      <p>Vehículos registrados en el estacionamiento.</p>
     </div>
 
-    <button
-      type="button"
-      class="btn-nuevo"
-      (click)="abrirFormulario()">
-      <i class="bi bi-plus-lg"></i>
-      Registrar vehículo
+    <button type="button" class="veh-btn-actualizar" (click)="cargarVehiculos()" [disabled]="cargando()">
+      <i class="bi bi-arrow-clockwise"></i> Actualizar
     </button>
   </div>
 
   <div
     *ngIf="mensaje()"
-    class="mensaje"
-    [ngClass]="{
-      'mensaje-exito': tipoMensaje() === 'exito',
-      'mensaje-error': tipoMensaje() === 'error'
-    }">
-
-    <i
-      class="bi"
-      [ngClass]="{
-        'bi-check-circle': tipoMensaje() === 'exito',
-        'bi-exclamation-circle': tipoMensaje() === 'error'
-      }">
-    </i>
-
+    class="veh-pagina-mensaje"
+    [ngClass]="tipoMensaje() === 'exito' ? 'veh-mensaje-exito' : 'veh-mensaje-error'">
     {{ mensaje() }}
   </div>
 
-  <section
-    *ngIf="mostrarFormulario()"
-    class="vehiculos-card formulario-card">
+  <section class="veh-card">
 
-    <div class="card-header">
-      <div>
-        <h2>Registrar vehículo</h2>
-        <p>Ingrese los datos del vehículo.</p>
+    <div class="veh-filtros">
+      <div class="veh-campo veh-campo-buscar">
+        <label for="filtro">Buscar</label>
+        <input
+          id="filtro"
+          type="text"
+          [ngModel]="filtro()"
+          (ngModelChange)="cambiarFiltro($event)"
+          placeholder="Placa, propietario, marca o modelo" />
       </div>
 
-      <button
-        type="button"
-        class="btn-cerrar"
-        (click)="cerrarFormulario()">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <form
-      class="formulario"
-      (ngSubmit)="registrarVehiculo()">
-
-      <div class="form-grid">
-
-        <div class="campo">
-          <label for="placa">Número de placa</label>
-
-          <input
-            id="placa"
-            name="placa"
-            type="text"
-            [(ngModel)]="nuevoVehiculo.placa"
-            maxlength="10"
-            placeholder="Ejemplo: ABC-123">
-        </div>
-
-        <div class="campo">
-          <label for="propietario">Propietario</label>
-
-          <input
-            id="propietario"
-            name="propietario"
-            type="text"
-            [(ngModel)]="nuevoVehiculo.propietario"
-            placeholder="Nombre del propietario">
-        </div>
-
-        <div class="campo">
-          <label for="tipoUsuario">Tipo de usuario</label>
-
-          <select
-            id="tipoUsuario"
-            name="tipoUsuario"
-            [(ngModel)]="nuevoVehiculo.tipoUsuario">
-
-            <option value="">Seleccione una opción</option>
-            <option value="Estudiante">Estudiante</option>
-            <option value="Docente">Docente</option>
-            <option value="Administrativo">Administrativo</option>
-            <option value="Empleado">Empleado</option>
-            <option value="Vigilante">Vigilante</option>
-            <option value="Invitado">Invitado</option>
-
-          </select>
-        </div>
-
-        <div class="campo">
-          <label for="marca">Marca</label>
-
-          <input
-            id="marca"
-            name="marca"
-            type="text"
-            [(ngModel)]="nuevoVehiculo.marca"
-            placeholder="Ejemplo: Toyota">
-        </div>
-
-        <div class="campo">
-          <label for="modelo">Modelo</label>
-
-          <input
-            id="modelo"
-            name="modelo"
-            type="text"
-            [(ngModel)]="nuevoVehiculo.modelo"
-            placeholder="Ejemplo: Corolla">
-        </div>
-
-        <div class="campo">
-          <label for="color">Color</label>
-
-          <input
-            id="color"
-            name="color"
-            type="text"
-            [(ngModel)]="nuevoVehiculo.color"
-            placeholder="Ejemplo: Blanco">
-        </div>
-
+      <div class="veh-campo">
+        <label for="filtroTipo">Tipo de vehículo</label>
+        <select id="filtroTipo" [ngModel]="filtroTipo()" (ngModelChange)="cambiarFiltroTipo($event)">
+          <option value="">Todos</option>
+          <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+        </select>
       </div>
-
-      <div class="formulario-acciones">
-
-        <button
-          type="button"
-          class="btn-cancelar"
-          (click)="cerrarFormulario()"
-          [disabled]="guardando()">
-          Cancelar
-        </button>
-
-        <button
-          type="submit"
-          class="btn-guardar"
-          [disabled]="guardando()">
-
-          <i
-            class="bi"
-            [ngClass]="
-              guardando()
-                ? 'bi-hourglass-split'
-                : 'bi-check-lg'
-            ">
-          </i>
-
-          <span *ngIf="!guardando()">
-            Guardar vehículo
-          </span>
-
-          <span *ngIf="guardando()">
-            Guardando...
-          </span>
-
-        </button>
-
-      </div>
-
-    </form>
-
-  </section>
-
-  <section class="vehiculos-card">
-
-    <div class="card-header">
-      <div>
-        <h2>Vehículos registrados</h2>
-        <p>
-          {{ vehiculos().length }} vehículo(s) registrado(s)
-        </p>
-      </div>
-
-      <button
-        type="button"
-        class="btn-recargar"
-        (click)="cargarVehiculos()"
-        [disabled]="cargando()">
-
-        <i class="bi bi-arrow-clockwise"></i>
-        Actualizar
-
-      </button>
     </div>
 
-    <div *ngIf="cargando()" class="estado-carga">
-      <i class="bi bi-hourglass-split"></i>
-      Cargando vehículos...
+    <div *ngIf="cargando()" class="veh-vacio">
+      <i class="bi bi-hourglass-split"></i> Cargando vehículos...
     </div>
 
-    <div
-      *ngIf="!cargando() && vehiculos().length === 0"
-      class="estado-vacio">
-
-      <i class="bi bi-car-front"></i>
-
-      <h3>No hay vehículos registrados</h3>
-
-      <p>
-        Registre el primer vehículo para comenzar.
-      </p>
-
+    <div *ngIf="!cargando() && filtrados().length === 0" class="veh-vacio">
+      No hay vehículos que coincidan.
     </div>
 
-    <div
-      *ngIf="!cargando() && vehiculos().length > 0"
-      class="tabla-contenedor">
-
-      <table>
-
+    <div class="veh-tabla-scroll" *ngIf="filtrados().length > 0">
+      <table class="veh-tabla">
         <thead>
           <tr>
+            <th></th>
             <th>Placa</th>
+            <th>Tipo de vehículo</th>
             <th>Propietario</th>
-            <th>Tipo de usuario</th>
-            <th>Vehículo</th>
+            <th>Usuario</th>
+            <th>Marca / modelo</th>
             <th>Color</th>
             <th>Estado</th>
           </tr>
         </thead>
-
         <tbody>
-
-          <tr *ngFor="let vehiculo of vehiculos()">
-
+          <tr *ngFor="let v of visibles()">
             <td>
-              <strong>{{ vehiculo.placa }}</strong>
+              <app-vehiculo-icono class="veh-fila-icono" [tipo]="tipoDe(v)" [color]="color(v)" />
             </td>
-
+            <td class="veh-placa">{{ v.placa }}</td>
             <td>
-              {{ vehiculo.propietario }}
+              <select
+                class="veh-select-tipo"
+                [ngModel]="tipoDe(v)"
+                (ngModelChange)="cambiarTipo(v, $event)"
+                [disabled]="guardandoId() === v.id">
+                <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+              </select>
             </td>
-
+            <td>{{ v.propietario }}</td>
+            <td><span class="veh-chip">{{ v.tipoUsuario }}</span></td>
+            <td>{{ v.marca }} {{ v.modelo }}</td>
+            <td>{{ v.color }}</td>
             <td>
-              {{ vehiculo.tipoUsuario }}
-            </td>
-
-            <td>
-              {{ vehiculo.marca }} {{ vehiculo.modelo }}
-            </td>
-
-            <td>
-              {{ vehiculo.color }}
-            </td>
-
-            <td>
-
-              <span
-                class="estado"
-                [ngClass]="
-                  vehiculo.dentro
-                    ? 'estado-dentro'
-                    : 'estado-fuera'
-                ">
-
-                <span class="estado-punto"></span>
-
-                {{ vehiculo.dentro ? 'Dentro' : 'Fuera' }}
-
+              <span class="veh-estado" [class.veh-dentro]="v.dentro" [class.veh-fuera]="!v.dentro">
+                {{ v.dentro ? 'Dentro' : 'Fuera' }}
               </span>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
 
-  </section>
+    <app-paginacion
+      [total]="filtrados().length"
+      [pagina]="pagina()"
+      [porPagina]="porPagina"
+      (cambio)="pagina.set($event)" />
 
+  </section>
 </div>
